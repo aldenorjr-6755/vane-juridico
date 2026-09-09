@@ -1,0 +1,3 @@
+# Relatório da última execução: é reescrito a cada `run.mjs` e só serve para
+# inspecionar a rodada local. Versioná-lo poluiria o diff a cada eval.
+last-run.json
