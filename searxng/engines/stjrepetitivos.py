@@ -55,6 +55,10 @@ _STOPWORDS = {"e", "ou", "de", "da", "do", "das", "dos", "a", "o", "as", "os", "
 _BLOCK_RE = re.compile(r'<div class="container containerDocumento">(.*?)(?=<div class="container containerDocumento">|<div class="rodape|\Z)', re.S)
 _TEMA_RE = re.compile(r'Tema Repetitivo\s*<span class="dados_campo_processo fonte_destaque\s*">\s*(\d+)\s*</span>', re.S)
 _TOTAL_RE = re.compile(r'(\d+)\s+documentos?\s+encontrados?', re.I)
+# O numero do recurso paradigma. Sem ele no contexto, o modelo colava um REsp
+# inventado ao lado de um tema correto - medido em 2026-09-08 no Tema 985, onde
+# a resposta escreveu "REsp 1.367.616/SC" e a pagina traz 1667842 e 1667843.
+_PARADIGMA_RE = re.compile(r'<b>\s*((?:REsp|RE|AREsp|EREsp|HC|RMS)\s*[\d./-]+[A-Z/]*)\s*</b>')
 
 
 def _field(block, label):
@@ -183,13 +187,21 @@ def response(resp):
         situacao = _field(block, "Situação")
         orgao = _field(block, "Órgão julgador")
         ramo = _field(block, "Ramo do direito")
+        paradigmas = []
+        for m in _PARADIGMA_RE.findall(block):
+            item = " ".join(m.split())
+            if item not in paradigmas:
+                paradigmas.append(item)
 
         header = f"STJ · Tema Repetitivo {numero}"
         if situacao:
             header += f" · {situacao}"
 
+        # Paradigma primeiro: e' curto e critico, e o corte em 900 chars cairia
+        # sobre ele se viesse depois da questao e da tese.
         body = " ".join(
             part for part in (
+                f"Processo(s) paradigma: {', '.join(paradigmas)}." if paradigmas else "",
                 f"Questão: {questao}" if questao else "",
                 f"Tese firmada: {tese}" if tese else "",
                 f"Órgão julgador: {orgao}." if orgao else "",

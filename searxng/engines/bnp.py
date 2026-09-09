@@ -175,7 +175,17 @@ def response(resp):
         if not titulo or not item_id:
             continue
 
-        conteudo = f"Tese: {tese}" if tese else ""
+        # O numero do processo paradigma vai junto: sem ele o modelo inventa um
+        # ao lado de um precedente correto (medido no Tema/RR 985 em 2026-09-08).
+        paradigmas = [
+            str(p.get("numero"))
+            for p in (item.get("processosParadigma") or [])
+            if p and p.get("numero")
+        ]
+
+        conteudo = (
+            f"Processo(s) paradigma: {', '.join(paradigmas[:4])}. " if paradigmas else ""
+        ) + (f"Tese: {tese}" if tese else "")
         if situacao:
             conteudo = f"[{situacao}] {conteudo}".strip()
 
