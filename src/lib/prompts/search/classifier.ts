@@ -23,15 +23,20 @@ NOTE: BY GENERAL KNOWLEDGE WE MEAN INFORMATION THAT IS OBVIOUS, WIDELY KNOWN, OR
    - Set it to true if the query seeks opinions, personal experiences, community advice, or discussions for example "What do people think about...", "Are there any discussions on...", or "What are the common issues faced by..."
    - Set it to true if they're asking for reviews or feedback from users on products, services, or experiences.
    - Set it to false if the query can be answered through general web search or does not specifically request information from discussion platforms.
-5. showWeatherWidget (boolean): Decide if displaying a weather widget would adequately address the user's query.
+5. legalSearch (boolean): Determine whether the query is about Brazilian law and should be answered from legal sources rather than the open web.
+   - Set it to true when the query mentions or implies: lei, artigo de lei, código (Penal, Civil, CPC, CPP, CLT, CTN), súmula, tema repetitivo, repercussão geral, jurisprudência, tese firmada, acórdão, REsp, RE, HC, ADI, ADPF, agravo, prazo processual, prescrição, decadência, or the name of a Brazilian court (STF, STJ, TST, TRF, TJ).
+   - Set it to true for questions about what a Brazilian court has decided, what a statute says, or how a legal deadline is counted.
+   - Set it to false for law of other countries, for generic civics questions, and for legal-sounding words used outside a legal context.
+   - When you set it to true, also set skipSearch to false.
+6. showWeatherWidget (boolean): Decide if displaying a weather widget would adequately address the user's query.
    - Set it to true if the user's query is specifically about current weather conditions, forecasts, or any weather-related information for a particular location.
    - Set it to true for queries like "What's the weather like in [Location]?" or "Will it rain tomorrow in [Location]?" or "Show me the weather" (Here they mean weather of their current location).
    - If it can fully answer the user query without needing additional search, set skipSearch to true as well.
-6. showStockWidget (boolean): Determine if displaying a stock market widget would sufficiently fulfill the user's request.
+7. showStockWidget (boolean): Determine if displaying a stock market widget would sufficiently fulfill the user's request.
    - Set it to true if the user's query is specifically about current stock prices or stock related information for particular companies. Never use it for a market analysis or news about stock market.
    - Set it to true for queries like "What's the stock price of [Company]?" or "How is the [Stock] performing today?" or "Show me the stock prices" (Here they mean stocks of companies they are interested in).
    - If it can fully answer the user query without needing additional search, set skipSearch to true as well.
-7. showCalculationWidget (boolean): Decide if displaying a calculation widget would adequately address the user's query.
+8. showCalculationWidget (boolean): Decide if displaying a calculation widget would adequately address the user's query.
    - Set it to true if the user's query involves mathematical calculations, conversions, or any computation-related tasks.
    - Set it to true for queries like "What is 25% of 80?" or "Convert 100 USD to EUR" or "Calculate the square root of 256" or "What is 2 * 3 + 5?" or other mathematical expressions.
    - If it can fully answer the user query without needing additional search, set skipSearch to true as well.
@@ -54,6 +59,7 @@ You must respond in the following JSON format without any extra text, explanatio
     "personalSearch": boolean,
     "academicSearch": boolean,
     "discussionSearch": boolean,
+    "legalSearch": boolean,
     "showWeatherWidget": boolean,
     "showStockWidget": boolean,
     "showCalculationWidget": boolean,

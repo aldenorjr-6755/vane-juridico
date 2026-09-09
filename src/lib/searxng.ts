@@ -5,6 +5,12 @@ export interface SearxngSearchOptions {
   engines?: string[];
   language?: string;
   pageno?: number;
+  /**
+   * Recency filter. Supported by `google_cse` (which declares
+   * `time_range_support = True`) among others; engines that do not support it
+   * simply ignore the parameter.
+   */
+  time_range?: 'day' | 'week' | 'month' | 'year';
 }
 
 interface SearxngSearchResult {
@@ -16,12 +22,30 @@ interface SearxngSearchResult {
   content?: string;
   author?: string;
   iframe_src?: string;
+  publishedDate?: string;
+  engine?: string;
+  engines?: string[];
+}
+
+export interface SearxngSearchResponse {
+  results: SearxngSearchResult[];
+  suggestions: string[];
+  /**
+   * Engines that did not answer this query, as `[engine, reason]` pairs, e.g.
+   * `['google cse', 'Suspended: too many requests']`.
+   *
+   * SearXNG reports this and Vane used to throw it away, which made "engine is
+   * suspended" and "there are no results" arrive at the user as the exact same
+   * empty answer - the same silent-failure class as the non-existent `reddit`
+   * engine that used to back the discussion search.
+   */
+  unresponsiveEngines: [string, string][];
 }
 
 export const searchSearxng = async (
   query: string,
   opts?: SearxngSearchOptions,
-) => {
+): Promise<SearxngSearchResponse> => {
   const searxngURL = getSearxngURL();
 
   const url = new URL(`${searxngURL}/search?format=json`);
@@ -30,6 +54,7 @@ export const searchSearxng = async (
   if (opts) {
     Object.keys(opts).forEach((key) => {
       const value = opts[key as keyof SearxngSearchOptions];
+      if (value === undefined || value === null) return;
       if (Array.isArray(value)) {
         url.searchParams.append(key, value.join(','));
         return;
@@ -39,7 +64,10 @@ export const searchSearxng = async (
   }
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 10000);
+  /* A `site:`-restricted query on google cse is noticeably slower than a plain
+     web search, and the legal engines run a cheap pre-flight probe before the
+     real query; 10s used to cut them off. */
+  const timeoutId = setTimeout(() => controller.abort(), 30000);
 
   try {
     const res = await fetch(url, {
@@ -52,10 +80,12 @@ export const searchSearxng = async (
 
     const data = await res.json();
 
-    const results: SearxngSearchResult[] = data.results;
-    const suggestions: string[] = data.suggestions;
+    const results: SearxngSearchResult[] = data.results ?? [];
+    const suggestions: string[] = data.suggestions ?? [];
+    const unresponsiveEngines: [string, string][] =
+      data.unresponsive_engines ?? [];
 
-    return { results, suggestions };
+    return { results, suggestions, unresponsiveEngines };
   } catch (err: any) {
     if (err.name === 'AbortError') {
       throw new Error('SearXNG search timed out');

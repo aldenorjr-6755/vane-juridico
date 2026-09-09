@@ -16,6 +16,10 @@ export interface Discover {
 
 const topics: { key: string; display: string }[] = [
   {
+    display: 'Jurídico',
+    key: 'juridico',
+  },
+  {
     display: 'Tech & Science',
     key: 'tech',
   },

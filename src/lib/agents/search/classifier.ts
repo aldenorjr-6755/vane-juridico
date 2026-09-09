@@ -17,6 +17,11 @@ const schema = z.object({
     discussionSearch: z
       .boolean()
       .describe('Indicates whether to perform a discussion search.'),
+    legalSearch: z
+      .boolean()
+      .describe(
+        'Indicates whether the query is about Brazilian law and should be answered from legal sources.',
+      ),
     showWeatherWidget: z
       .boolean()
       .describe('Indicates whether to show the weather widget.'),

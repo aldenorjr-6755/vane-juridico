@@ -9,21 +9,41 @@ import z from 'zod';
 import Scraper from '@/lib/scraper';
 import { splitText } from '@/lib/utils/splitText';
 
+export type SearchQuery =
+  | string
+  | { q: string; searchConfig?: SearxngSearchOptions };
+
 export const executeSearch = async (input: {
-  queries: string[];
+  queries: SearchQuery[];
   mode: SearchAgentConfig['mode'];
   searchConfig?: SearxngSearchOptions;
   researchBlock: ResearchBlock;
   session: InstanceType<typeof SessionManager>;
   llm: BaseLLM<any>;
   embedding: BaseEmbedding<any>;
+  /**
+   * Optional guard applied to every raw result before it is embedded. The legal
+   * search uses it to drop anything outside its whitelisted hosts: `site:` is
+   * honoured by `google cse` and `bing news` but silently ignored by the `bing`
+   * web engine, so the operator alone is not a filter.
+   */
+  resultFilter?: (result: { url: string; title: string }) => boolean;
 }) => {
   const researchBlock = input.researchBlock;
+
+  /* Each query can carry its own SearXNG config. The legal search needs this:
+     one `site:`-scoped query per whitelisted host, with the engine pinned per
+     host, all inside a single search pass (one picker, one dedup). */
+  const queries = input.queries.map((q) =>
+    typeof q === 'string'
+      ? { q, searchConfig: input.searchConfig }
+      : { q: q.q, searchConfig: q.searchConfig ?? input.searchConfig },
+  );
 
   researchBlock.data.subSteps.push({
     id: crypto.randomUUID(),
     type: 'searching',
-    searching: input.queries,
+    searching: queries.map((q) => q.q),
   });
 
   input.session.updateBlock(researchBlock.id, [
@@ -34,16 +54,62 @@ export const executeSearch = async (input: {
     },
   ]);
 
+  const reportedEngineFailures = new Set<string>();
+
+  /* Surfaces a SearXNG engine that did not answer. Without this, a suspended
+     engine and a genuinely empty result set look identical to the user. */
+  const reportUnresponsiveEngines = (
+    unresponsiveEngines: [string, string][],
+  ) => {
+    const fresh = unresponsiveEngines.filter(
+      ([engine]) => !reportedEngineFailures.has(engine),
+    );
+
+    if (fresh.length === 0) return;
+
+    fresh.forEach(([engine]) => reportedEngineFailures.add(engine));
+
+    researchBlock.data.subSteps.push({
+      id: crypto.randomUUID(),
+      type: 'reasoning',
+      reasoning: `Partial results: ${fresh
+        .map(([engine, reason]) => `${engine} did not answer (${reason})`)
+        .join('; ')}.`,
+    });
+
+    input.session.updateBlock(researchBlock.id, [
+      {
+        op: 'replace',
+        path: '/data/subSteps',
+        value: researchBlock.data.subSteps,
+      },
+    ]);
+  };
+
+  const applyFilter = <T extends { url: string; title: string }>(
+    results: T[],
+  ): T[] => (input.resultFilter ? results.filter(input.resultFilter) : results);
+
   if (input.mode === 'speed' || input.mode === 'balanced') {
     const searchResultsBlockId = crypto.randomUUID();
     let searchResultsEmitted = false;
 
     const results: Chunk[] = [];
 
-    const search = async (q: string) => {
+    const search = async ({
+      q,
+      searchConfig,
+    }: {
+      q: string;
+      searchConfig?: SearxngSearchOptions;
+    }) => {
       const res = await searchSearxng(q, {
-        ...(input.searchConfig ? input.searchConfig : {}),
+        ...(searchConfig ? searchConfig : {}),
       });
+
+      reportUnresponsiveEngines(res.unresponsiveEngines);
+
+      const keptResults = applyFilter(res.results);
 
       let resultChunks: Chunk[] = [];
 
@@ -52,7 +118,7 @@ export const executeSearch = async (input: {
 
         resultChunks = (
           await Promise.all(
-            res.results.map(async (r) => {
+            keptResults.map(async (r) => {
               const content = r.content || r.title;
               const chunkEmbedding = (
                 await input.embedding.embedText([content])
@@ -71,7 +137,7 @@ export const executeSearch = async (input: {
           )
         ).filter((c) => c.metadata.similarity > 0.5);
       } catch (err) {
-        resultChunks = res.results.map((r) => {
+        resultChunks = keptResults.map((r) => {
           const content = r.content || r.title;
 
           return {
@@ -125,7 +191,7 @@ export const executeSearch = async (input: {
       }
     };
 
-    await Promise.all(input.queries.map(search));
+    await Promise.all(queries.map(search));
 
     results.sort((a, b) => b.metadata.similarity - a.metadata.similarity);
 
@@ -175,14 +241,22 @@ export const executeSearch = async (input: {
 
     const searchResults: Chunk[] = [];
 
-    const search = async (q: string) => {
+    const search = async ({
+      q,
+      searchConfig,
+    }: {
+      q: string;
+      searchConfig?: SearxngSearchOptions;
+    }) => {
       const res = await searchSearxng(q, {
-        ...(input.searchConfig ? input.searchConfig : {}),
+        ...(searchConfig ? searchConfig : {}),
       });
+
+      reportUnresponsiveEngines(res.unresponsiveEngines);
 
       let resultChunks: Chunk[] = [];
 
-      resultChunks = res.results.map((r) => {
+      resultChunks = applyFilter(res.results).map((r) => {
         const content = r.content || r.title;
 
         return {
@@ -235,7 +309,7 @@ export const executeSearch = async (input: {
       }
     };
 
-    await Promise.all(input.queries.map(search));
+    await Promise.all(queries.map(search));
 
     const pickerPrompt = `
       Assistant is an AI search result picker. Assistant's task is to pick 2-3 of the most relevant search results based off the query which can be then scraped for information to answer the query.
@@ -278,7 +352,7 @@ export const executeSearch = async (input: {
         },
         {
           role: 'user',
-          content: `<queries>${input.queries.join(', ')}</queries>\n<search_results>${searchResults.map((result, index) => `<result indice=${index}>${JSON.stringify(result)}</result>`).join('\n')}</search_results>`,
+          content: `<queries>${queries.map((q) => q.q).join(', ')}</queries>\n<search_results>${searchResults.map((result, index) => `<result indice=${index}>${JSON.stringify(result)}</result>`).join('\n')}</search_results>`,
         },
       ],
     });
@@ -390,7 +464,7 @@ export const executeSearch = async (input: {
                     },
                     {
                       role: 'user',
-                      content: `<queries>${input.queries.join(', ')}</queries>\n<scraped_data>${chunk}</scraped_data>`,
+                      content: `<queries>${queries.map((q) => q.q).join(', ')}</queries>\n<scraped_data>${chunk}</scraped_data>`,
                     },
                   ],
                 });
