@@ -13,5 +13,66 @@ server:
   secret_key: 'a2fb23f1b02e6ee83875b09826990de0f6bd908b6638e8c10277d415f6ab852b' # Is overwritten by ${SEARXNG_SECRET}
 
 engines:
+  # Engines locais para pesquisa juridica BR (modulos montados em
+  # /usr/local/searxng/searxng-src/searx/engines/ pelo docker run).
+  # Ficam desabilitadas de proposito: o Vane as ativa nomeando-as em
+  # `engines=` na consulta do modo Juridico, sem poluir a busca web normal.
+  - name: migalhas
+    engine: migalhas
+    shortcut: mig
+    disabled: true
+    timeout: 8.0
+  - name: conjur
+    engine: conjur
+    shortcut: cj
+    disabled: true
+    timeout: 8.0
+  - name: dizerodireito
+    engine: dizerodireito
+    shortcut: dd
+    disabled: true
+    timeout: 8.0
+  - name: stj repetitivos
+    engine: stjrepetitivos
+    shortcut: stjr
+    disabled: true
+    timeout: 25.0
+  - name: bnp
+    engine: bnp
+    shortcut: bnp
+    disabled: true
+    timeout: 15.0
+
+  # Required by Vane
   - name: wolframalpha
     disabled: false
+
+  # Verified working from this network (2026-08-31)
+  - name: bing
+    disabled: false
+  - name: yahoo
+    disabled: false
+
+  # Verified blocked/broken from this network - disabled so they stop
+  # adding latency and error noise to every query.
+  - name: google
+    disabled: true
+  - name: duckduckgo
+    disabled: true
+  - name: startpage
+    disabled: true
+  - name: brave
+    disabled: true
+  - name: qwant
+    disabled: true
+
+  # NAO declarar engine que nao existe no SearxNG aqui. Nomes desconhecidos nao
+  # sao ignorados em silencio: viram uma definicao nova sem o campo obrigatorio
+  # `engine:` e falham no registro, sujando o log a cada boot com
+  # `The "engine" field is missing`. Ja' aconteceu com aol / karmasearch /
+  # karmasearch videos, removidas em 2026-09-01 - nenhuma existe no SearxNG.
+  #
+  # Pelo mesmo motivo, engines que so' interessam a um modo do Vane (hackernews,
+  # boardreader, lemmy*, mastodon* na busca social) NAO devem ser ligadas aqui:
+  # nomea-las no parametro `engines=` da requisicao ja' as ativa naquela consulta,
+  # enquanto liga-las aqui despejaria ruido de forum em toda busca web normal.
