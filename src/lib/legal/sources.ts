@@ -31,9 +31,18 @@ export type LegalSource = {
   /** Host used in the `site:` operator. */
   siteQuery?: string;
   discovery: LegalDiscovery[];
-  /** SearXNG engine name, when `discovery` includes `native`. */
-  engine?: string;
+  /** Nome(s) da engine no SearXNG, quando `discovery` inclui `native`.
+   *  Lista quando a fonte precisa de uma instância por recorte - o CJF só
+   *  devolve documentos com um tribunal selecionado por consulta. */
+  engine?: string | string[];
   kind: LegalSourceKind;
+  /**
+   * `authority` sai da passada ampla e só roda na etapa 2. É para fonte cara:
+   * o CJF faz GET+POST por instância e são oito tribunais, o que levou duas
+   * perguntas do eval a estourar 300 s e morrer com `fetch failed`. Custo
+   * medido, não suposto.
+   */
+  tier?: 'broad' | 'authority';
   enabled: boolean;
   note?: string;
 };
@@ -176,9 +185,41 @@ export const LEGAL_SOURCES: LegalSource[] = [
        tribunal selecionado - com vários, vêm apenas os totais. O padrão é STJ.
        Sem `cse`: o conteúdo só existe atrás do POST, o Google não indexa. */
     discovery: ['native'],
-    engine: 'cjf',
+    /* Uma instância da engine por tribunal, porque o portal só devolve
+       documentos com UM selecionado - com vários vêm apenas os totais. O
+       SearXNG roda as instâncias em paralelo dentro de uma única consulta,
+       então a cobertura sai sem custar uma requisição do Vane por tribunal. */
+    engine: [
+      'cjf stj',
+      'cjf tnu',
+      'cjf trf1',
+      'cjf trf2',
+      'cjf trf3',
+      'cjf trf4',
+      'cjf trf5',
+      'cjf trf6',
+    ],
     kind: 'tribunal',
+    tier: 'authority',
     enabled: true,
+  },
+  {
+    key: 'tjma',
+    label: 'TJMA - Jurisconsult',
+    hosts: ['jurisconsult.tjma.jus.br', 'apijuris.tjma.jus.br'],
+    /* OFF, e não por escolha de escopo: a pesquisa do Jurisconsult é fechada
+       por **dois CAPTCHAs** - o reCAPTCHA do Google e um próprio, servido por
+       `apijuris.tjma.jus.br/v1/util/gera_captcha`, cujo valor o formulário
+       exige em "Digite o valor da imagem". Resolver captcha é linha que este
+       código não cruza, então não há como consultar a base daqui.
+       O que o TJMA tem de precedente qualificado (súmula, IRDR, IAC) chega
+       assim mesmo pelo BNP, que lista o TJMA entre os 62 órgãos - medido:
+       IAC 8, IRDR 8 e IRDR 11 para "prescrição". O que fica de fora é o
+       acórdão comum de segundo grau, que é exatamente o que está atrás do
+       captcha. */
+    discovery: ['none'],
+    kind: 'tribunal',
+    enabled: false,
   },
   {
     key: 'scon',

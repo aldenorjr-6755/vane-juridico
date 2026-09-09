@@ -42,9 +42,58 @@ engines:
     shortcut: bnp
     disabled: true
     timeout: 15.0
-  - name: cjf
+  - name: bnp superiores
+    engine: bnp
+    shortcut: bnps
+    orgaos: ['STF', 'STJ', 'TST', 'TNU']
+    disabled: true
+    timeout: 15.0
+  - name: cjf stj
     engine: cjf
-    shortcut: cjf
+    shortcut: cjfstj
+    tribunal: STJ
+    disabled: true
+    timeout: 30.0
+  - name: cjf tnu
+    engine: cjf
+    shortcut: cjftnu
+    tribunal: TNU
+    disabled: true
+    timeout: 30.0
+  - name: cjf trf1
+    engine: cjf
+    shortcut: cjft1
+    tribunal: TRF1
+    disabled: true
+    timeout: 30.0
+  - name: cjf trf2
+    engine: cjf
+    shortcut: cjft2
+    tribunal: TRF2
+    disabled: true
+    timeout: 30.0
+  - name: cjf trf3
+    engine: cjf
+    shortcut: cjft3
+    tribunal: TRF3
+    disabled: true
+    timeout: 30.0
+  - name: cjf trf4
+    engine: cjf
+    shortcut: cjft4
+    tribunal: TRF4
+    disabled: true
+    timeout: 30.0
+  - name: cjf trf5
+    engine: cjf
+    shortcut: cjft5
+    tribunal: TRF5
+    disabled: true
+    timeout: 30.0
+  - name: cjf trf6
+    engine: cjf
+    shortcut: cjft6
+    tribunal: TRF6
     disabled: true
     timeout: 30.0
 

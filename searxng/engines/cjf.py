@@ -169,10 +169,21 @@ def response(resp):
         if not campos.get("classe") and not campos.get("numero"):
             continue
 
+        # O tribunal vem da instancia da engine, nao do HTML: o campo "Origem"
+        # varia entre os tribunais (as vezes truncado, as vezes ausente) e o
+        # titulo e' o que identifica o julgado para quem le a resposta.
+        # O numero entra junto porque e' o material que evita o modelo
+        # reconstruir um de memoria.
+        classe = campos.get("classe", "")
+        numero = campos.get("numero", "")
+
+        if numero and numero not in classe:
+            classe = f"{classe} {numero}".strip()
+
         titulo = " · ".join(
             p for p in (
-                campos.get("origem", "").split(" - ")[0],
-                campos.get("classe"),
+                tribunal,
+                classe or None,
                 campos.get("relator") and f"Rel. {campos['relator']}",
                 campos.get("data"),
             ) if p

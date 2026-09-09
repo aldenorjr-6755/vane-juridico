@@ -68,6 +68,13 @@ _ORGAOS = [
     "TRT23", "TRT24",
 ]
 
+# Sobrescrevivel por instancia no settings.yml (`orgaos:` / `tipos:`). O nome
+# tem que ser exatamente este: o SearXNG seta o atributo pelo nome declarado no
+# settings, e ler um `_ORGAOS` privado aqui faz o filtro ser ignorado em
+# silencio - medido em 2026-09-09, quando a instancia "bnp superiores" devolveu
+# TRF03 e TRF06.
+orgaos = _ORGAOS
+
 _TIPOS = [
     "SUM", "SV", "RG", "ADI", "ADC", "ADO", "ADPF", "IAC", "SIRDR", "RR",
     "CT", "IRDR", "IRR", "PUIL", "NT", "OJ",
@@ -75,6 +82,12 @@ _TIPOS = [
 
 # Conectores que o manual diz explicitamente que nao sao operadores aqui.
 _STOPWORDS = {"e", "ou", "de", "da", "do", "das", "dos", "a", "o", "as", "os", "em", "no", "na"}
+
+
+# Nao usar `None` como padrao: o SearXNG trata atributo de modulo valendo None
+# como **configuracao obrigatoria** e recusa a engine com
+# `Missing engine config attribute`. Medido em 2026-09-09.
+tipos = _TIPOS
 
 
 def _filtro(termos, modo, pagina, tamanho):
@@ -92,8 +105,8 @@ def _filtro(termos, modo, pagina, tamanho):
             "nr": "",
             "pagina": pagina,
             "tamanhoPagina": tamanho,
-            "orgaos": _ORGAOS,
-            "tipos": _TIPOS,
+            "orgaos": orgaos,
+            "tipos": tipos,
         }
     }
 

@@ -94,15 +94,24 @@ export const executeSearch = async (input: {
     const searchResultsBlockId = crypto.randomUUID();
     let searchResultsEmitted = false;
 
-    const results: Chunk[] = [];
+    /* Um balde por consulta, em vez de um monte só. Concatenar tudo e ordenar
+       por similaridade deixa uma consulta com muitos trechos parecidos sufocar
+       outra inteira - medido duas vezes: a consulta do Planalto espremida pelo
+       orçamento, e a reformulação do pesquisador sufocando a pergunta original
+       do usuário. Intercalando, cada consulta contribui com o seu melhor antes
+       de qualquer uma contribuir com o segundo. */
+    const resultsPerQuery: Chunk[][] = queries.map(() => []);
 
-    const search = async ({
-      q,
-      searchConfig,
-    }: {
-      q: string;
-      searchConfig?: SearxngSearchOptions;
-    }) => {
+    const search = async (
+      {
+        q,
+        searchConfig,
+      }: {
+        q: string;
+        searchConfig?: SearxngSearchOptions;
+      },
+      queryIndex: number,
+    ) => {
       const res = await searchSearxng(q, {
         ...(searchConfig ? searchConfig : {}),
       });
@@ -151,7 +160,7 @@ export const executeSearch = async (input: {
           };
         });
       } finally {
-        results.push(...resultChunks);
+        resultsPerQuery[queryIndex].push(...resultChunks);
       }
 
       if (!searchResultsEmitted) {
@@ -191,9 +200,24 @@ export const executeSearch = async (input: {
       }
     };
 
-    await Promise.all(queries.map(search));
+    await Promise.all(queries.map((query, i) => search(query, i)));
 
-    results.sort((a, b) => b.metadata.similarity - a.metadata.similarity);
+    /* Ordena dentro de cada consulta, depois intercala em rodadas. */
+    resultsPerQuery.forEach((bucket) =>
+      bucket.sort((a, b) => b.metadata.similarity - a.metadata.similarity),
+    );
+
+    const results: Chunk[] = [];
+
+    for (
+      let rank = 0;
+      rank < Math.max(0, ...resultsPerQuery.map((b) => b.length));
+      rank++
+    ) {
+      resultsPerQuery.forEach((bucket) => {
+        if (bucket[rank]) results.push(bucket[rank]);
+      });
+    }
 
     const uniqueSearchResultIndices: Set<number> = new Set();
 

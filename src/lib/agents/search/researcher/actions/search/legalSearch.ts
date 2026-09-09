@@ -33,6 +33,36 @@ const schema = z.object({
 const MAX_CSE_QUERIES = 4;
 const MAX_NEWS_QUERIES = 4;
 
+/**
+ * Etapa 2: bases oficiais escopadas por autoridade.
+ *
+ * A etapa 1 busca amplo e mistura doutrina com tribunal, o que faz o precedente
+ * constitucional competir por espaço com artigo de blog jurídico. Duas falhas
+ * medidas vieram daí: a resposta sobre ICMS na base do PIS/COFINS saiu pela
+ * posição do STJ sem citar a RG 69 do STF, e a do terço de férias saiu pela
+ * RG 1241 sem a RG 985. Nos dois casos a busca direta nas bases oficiais acha o
+ * precedente em primeiro lugar.
+ *
+ * Só roda quando a etapa 1 NÃO trouxe precedente de tribunal superior - é a
+ * dependência entre os passos, não uma segunda busca cega.
+ *
+ * Se alguma dessas engines não estiver declarada no SearXNG, ele cai nas
+ * engines gerais em silêncio; o pós-filtro por host descarta o que vier, então
+ * a degradação é para vazio, não para resultado errado.
+ */
+const AUTHORITY_ENGINES = ['bnp superiores', 'stj repetitivos'];
+
+/** A pergunta é sobre tribunal regional? Aí o CJF entra mesmo com precedente superior presente. */
+const pedeRegional = (q: string): boolean =>
+  /\bTRF\b|tribuna(l|is) regiona|regional|segunda inst[âa]ncia/i.test(q);
+
+/** Precedente de tribunal superior já presente nos resultados da etapa 1. */
+const temPrecedenteSuperior = (results: Chunk[]): boolean =>
+  results.some((r) => {
+    const titulo = r.metadata?.title ?? '';
+    return /^(STF|STJ|TST|TNU)\s*·/.test(titulo) || /·\s*(RG|SUM|SV)\s*\d/.test(titulo);
+  });
+
 const STF_JURISPRUDENCIA_URL =
   'https://jurisprudencia.stf.jus.br/pages/search?base=acordaos&pesquisa_inteiro_teor=false&sinonimo=true&plural=true&radicais=false&buscaExata=true&sort=_score&sortBy=desc&queryString=';
 
@@ -46,9 +76,15 @@ const buildQueryPlan = (
 
   const plan: SearchQuery[] = [];
 
-  const nativeEngines = sources
-    .filter((s) => s.discovery.includes('native') && s.engine)
-    .map((s) => s.engine as string);
+  const enginesDe = (lista: typeof sources) =>
+    lista.flatMap((s) => (Array.isArray(s.engine) ? s.engine : [s.engine as string]));
+
+  const nativeEngines = enginesDe(
+    sources.filter(
+      (s) =>
+        s.discovery.includes('native') && s.engine && s.tier !== 'authority',
+    ),
+  );
 
   /* The site's own search, through a dedicated SearXNG engine. One request per
      query covers every native source at once and costs no CSE quota.
@@ -121,6 +157,14 @@ Regras:
 6. Os resultados do BNP e dos temas repetitivos do STJ trazem a **situação** do precedente (Vigente, Cancelado, Trânsito em Julgado, Afetado). Precedente cancelado ou ainda em julgamento não pode ser apresentado como entendimento firmado - repasse a situação na resposta.
 `;
 
+/** Engines das fontes marcadas `authority` (hoje só o CJF, por tribunal). */
+const enginesAuthority = (incluir: boolean): string[] =>
+  incluir
+    ? getEnabledLegalSources()
+        .filter((s) => s.tier === 'authority' && s.engine)
+        .flatMap((s) => (Array.isArray(s.engine) ? s.engine : [s.engine as string]))
+    : [];
+
 const legalSearchAction: ResearchAction<typeof schema> = {
   name: 'legal_search',
   schema: schema,
@@ -162,6 +206,65 @@ const legalSearchAction: ResearchAction<typeof schema> = {
          does not, and returned zero on-domain results in measurement. */
       resultFilter: (r) => isWhitelistedLegalUrl(r.url),
     });
+
+    /* Etapa 2: as bases oficiais rodam SEMPRE.
+       Antes isto era condicionado a "a etapa 1 não trouxe precedente superior",
+       e a condição se mostrou permissiva demais: bastava um precedente superior
+       qualquer para a passada de autoridade nunca acontecer. Foi assim que o
+       terço de férias ficou sem a RG 985 e passou a citar "Tema 1.248", número
+       que não estava em fonte nenhuma. Elas são baratas - duas APIs - então o
+       certo é sempre perguntar.
+
+       O que fica condicionado é só o CJF, que é caro (GET+POST por instância,
+       oito tribunais): entra quando a pergunta é regional ou quando a etapa 1
+       de fato não trouxe precedente superior. Aninhar o teste de "regional"
+       dentro da condição anterior foi o que derrubou o caso dos TRFs. */
+    {
+      const faltaSuperior = !temPrecedenteSuperior(results);
+      const querRegional =
+        pedeRegional(additionalConfig.standaloneQuery ?? '') || faltaSuperior;
+      const regionais = enginesAuthority(querRegional);
+
+      researchBlock.data.subSteps.push({
+        id: crypto.randomUUID(),
+        type: 'reasoning',
+        reasoning: `Consultando as bases oficiais diretamente (BNP e temas repetitivos do STJ)${
+          regionais.length > 0
+            ? ', mais a Jurisprudência Unificada do CJF por tribunal'
+            : ''
+        }.`,
+      });
+
+      additionalConfig.session.updateBlock(additionalConfig.researchBlockId, [
+        {
+          op: 'replace',
+          path: '/data/subSteps',
+          value: researchBlock.data.subSteps,
+        },
+      ]);
+
+      const autoridade = await executeSearch({
+        llm: additionalConfig.llm,
+        embedding: additionalConfig.embedding,
+        mode: additionalConfig.mode,
+        queries: [additionalConfig.standaloneQuery, ...queries]
+          .filter((q): q is string => Boolean(q && q.trim()))
+          .slice(0, 2)
+          .map((q) => ({
+            q,
+            searchConfig: {
+              language: 'pt-BR',
+              engines: [...AUTHORITY_ENGINES, ...regionais],
+            },
+          })),
+        researchBlock: researchBlock,
+        session: additionalConfig.session,
+        resultFilter: (r) => isWhitelistedLegalUrl(r.url),
+      });
+
+      const jaVistas = new Set(results.map((r) => r.metadata?.url));
+      results.push(...autoridade.filter((r) => !jaVistas.has(r.metadata?.url)));
+    }
 
     if (input.stf_jurisprudencia) {
       const url = `${STF_JURISPRUDENCIA_URL}${encodeURIComponent(
