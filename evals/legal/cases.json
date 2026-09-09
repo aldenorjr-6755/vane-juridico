@@ -1,0 +1,157 @@
+{
+  "_comment": [
+    "Casos de avaliação do modo Jurídico. O gabarito NÃO vem de memória:",
+    "cada `gold` foi colhido consultando a base oficial (BNP/CNJ e temas",
+    "repetitivos do STJ) em 2026-09-08 e conferido um a um. Ao adicionar um",
+    "caso, colha o gabarito da mesma forma - um gabarito lembrado de cabeça",
+    "reintroduz exatamente o erro que este eval existe para pegar.",
+    "",
+    "gold        - marcadores que devem aparecer nas FONTES recuperadas (any-of).",
+    "must_cite   - texto que deve aparecer na RESPOSTA (all-of).",
+    "must_not    - texto proibido na RESPOSTA (nenhum).",
+    "caveat_for  - se uma fonte com esta situação for citada, a resposta tem",
+    "              que trazer a ressalva (regex em `caveat_words`)."
+  ],
+  "cases": [
+    {
+      "id": "prescricao-intercorrente-execucao-fiscal",
+      "query": "Qual o entendimento do STJ sobre o termo inicial da prescrição intercorrente na execução fiscal?",
+      "gold": [
+        "SUM 314",
+        "Súmula 314",
+        "RG 390",
+        "Tema Repetitivo 566",
+        "Tema Repetitivo 567",
+        "Tema Repetitivo 568",
+        "Tema Repetitivo 569",
+        "Tema Repetitivo 570",
+        "Tema Repetitivo 571",
+        "RR 569",
+        "RR 570",
+        "RR 571"
+      ],
+      "must_not": [
+        "1.604.412",
+        "1604412"
+      ],
+      "nota": "O IAC 1.604.412/SC e' de execucao civil, nao fiscal - erro real de 2026-09-08. Os Temas 566-571 sao a familia do REsp 1.340.553/RS; qualquer um ancora a resposta."
+    },
+    {
+      "id": "honorarios-prescricao-intercorrente",
+      "query": "Cabe condenação em honorários advocatícios quando a execução fiscal é extinta por prescrição intercorrente?",
+      "gold": [
+        "RR 1229",
+        "IRDR 4"
+      ],
+      "caveat_for": "RE Pendente",
+      "caveat_words": [
+        "pendente",
+        "não.{0,20}definitiv",
+        "ainda pode",
+        "não transitou"
+      ],
+      "nota": "STJ RR 1229 está 'Acórdão Publicado (RE Pendente)'. Apresentar como tese firmada sem ressalva foi o defeito que motivou este caso."
+    },
+    {
+      "id": "multa-cominatoria-exibicao-documento",
+      "query": "Cabe multa cominatória na ação de exibição de documentos?",
+      "gold": [
+        "SUM 372",
+        "Súmula 372",
+        "RR 705",
+        "RR 1000",
+        "Tema Repetitivo 1000"
+      ],
+      "must_cite": [
+        "372"
+      ]
+    },
+    {
+      "id": "dano-moral-pessoa-juridica",
+      "query": "A pessoa jurídica pode sofrer dano moral, segundo o STJ?",
+      "gold": [
+        "SUM 227",
+        "Súmula 227"
+      ],
+      "must_cite": [
+        "227"
+      ]
+    },
+    {
+      "id": "cotas-condominiais-preferencia",
+      "query": "O crédito de cotas condominiais tem preferência sobre o crédito hipotecário na execução?",
+      "gold": [
+        "SUM 478",
+        "Súmula 478"
+      ],
+      "must_cite": [
+        "478"
+      ]
+    },
+    {
+      "id": "concessionaria-rodovia-animais",
+      "query": "A concessionária de rodovia responde por acidente causado por animal na pista?",
+      "gold": [
+        "RR 1122",
+        "Tema Repetitivo 1122"
+      ]
+    },
+    {
+      "id": "icms-base-pis-cofins",
+      "query": "O ICMS compõe a base de cálculo do PIS e da COFINS?",
+      "gold": [
+        "RG 69",
+        "Tema 69"
+      ]
+    },
+    {
+      "id": "repeticao-indebito-juros-selic",
+      "query": "Qual índice se aplica na atualização da repetição de indébito tributário?",
+      "gold": [
+        "RR 145",
+        "SELIC"
+      ]
+    },
+    {
+      "id": "usucapiao-extraordinaria",
+      "query": "Quais os requisitos reconhecidos pelo STJ para a usucapião extraordinária?",
+      "gold": [
+        "RR 985",
+        "Tema Repetitivo 985"
+      ]
+    },
+    {
+      "id": "terco-ferias-contribuicao",
+      "query": "Incide contribuição previdenciária sobre o terço constitucional de férias?",
+      "gold": [
+        "RG 985",
+        "RG 163"
+      ],
+      "nota": "RG 985 e RG 163 apontam em sentidos diferentes; a resposta não deve apresentar um deles como pacífico sem mencionar o outro."
+    },
+    {
+      "id": "tema-inexistente",
+      "query": "Qual a tese firmada no Tema 9999 do STJ?",
+      "gold": [],
+      "must_not": [
+        "a tese firmada é",
+        "a tese fixada é",
+        "o STJ fixou a tese"
+      ],
+      "expect_refusal": true,
+      "refusal_words": [
+        "não .{0,40}(encontr|exist|localiz|confirm|retorn|cont[eé]m|disponív)",
+        "inexistente",
+        "sem .{0,20}conteúdo",
+        "não há .{0,25}tese"
+      ],
+      "nota": "A página de tema inexistente responde HTTP 200 com corpo vazio. O status não prova nada."
+    },
+    {
+      "id": "scon-bloqueado",
+      "query": "Qual o inteiro teor da Súmula 7 do STJ conforme o SCON?",
+      "gold": [],
+      "nota": "scon.stj.jus.br responde 403 mesmo a navegador real. Aqui só se verifica pureza da whitelist e ausência de identificador inventado."
+    }
+  ]
+}

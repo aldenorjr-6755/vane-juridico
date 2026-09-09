@@ -1,0 +1,137 @@
+{
+  "mode": "balanced",
+  "model": "models/gemini-3.1-flash-lite",
+  "at": "2026-09-09T01:44:23.920Z",
+  "report": [
+    {
+      "id": "prescricao-intercorrente-execucao-fiscal",
+      "ok": true,
+      "fails": [],
+      "notes": [
+        "gold: SUM 314"
+      ],
+      "sources": 20,
+      "secs": 33,
+      "answer": "O termo inicial da prescrição intercorrente na execução fiscal é regido pela Súmula 314 do Superior Tribunal de Justiça [4].\n\nO entendimento consolidado é que, não localizados bens penhoráveis, suspende-se o processo por um ano, findo o qual se inicia automaticamente o prazo da prescrição quinquenal intercorrente [4].\n\nQuanto à interpretação da Lei nº 14.195/2021, que alterou o regime da prescrição intercorrente no Código de Processo Civil, a matéria é objeto de debate jurídico, mas a norma não altera a natureza da Súmula 314 para execuções fiscais fundadas no art. 40 da Lei nº 6.830/1980 [4, 13]. \n\nRessalte-se que a controvérsia sobre a modulação dos efeitos de decisão do STJ que definiu o termo inicial da contagem de prazo da prescrição intercorrente foi declarada como de natureza infraconstitucional pelo STF, carecendo de repercussão geral (RE 1333276, Tema 1162) [17]."
+    },
+    {
+      "id": "honorarios-prescricao-intercorrente",
+      "ok": true,
+      "fails": [],
+      "notes": [
+        "gold: IRDR 4"
+      ],
+      "sources": 20,
+      "secs": 40,
+      "answer": "A possibilidade de condenação em honorários advocatícios na extinção da execução fiscal por prescrição intercorrente depende da configuração fática do procedimento e da existência de resistência da Fazenda Pública.\n\n**Precedente de rito de Incidente de Resolução de Demandas Repetitivas (IRDR):**\nO Tribunal Regional Federal da 3ª Região fixou, em IRDR com trânsito em julgado, a tese de que **não cabe** condenação em honorários advocatícios contra a União Federal quando a exceção de pré-executividade é acolhida para reconhecer a prescrição intercorrente (art. 40, § 4º, da Lei nº 6.830/80), desde que não haja objeção (resistência) da exequente [1].\n\n**Considerações adicionais:**\n*   **Ausência de resistência:** O entendimento jurisprudencial, refletido em decisões de turma, orienta que a extinção por prescrição intercorrente, quando ocorre sem controvérsia meritória instaurada por resistência da Fazenda Pública, frequentemente afasta o dever de sucumbência [13].\n*   **Distinção de ações:** Caso a extinção ocorra em embargos à execução ou ação anulatória, o entendimento (conforme IRDR do TJSC com trânsito em julgado) é de que a autonomia das ações autoriza a condenação em honorários, pois o trabalho do advogado em cada processo deve ser remunerado [16].\n\nNão há, nas fontes consultadas, tese de repetitivo do Superior Tribunal de Justiça específica sobre a fixação de honorários em prescrição intercorrente de execução fiscal. As teses vigentes do STJ sobre a prescrição intercorrente (Tema 568, rito de Recurso Repetitivo) tratam apenas dos marcos interruptivos (efetiva constrição ou citação) e não da verba honorária [9]."
+    },
+    {
+      "id": "multa-cominatoria-exibicao-documento",
+      "ok": true,
+      "fails": [],
+      "notes": [
+        "gold: SUM 372"
+      ],
+      "sources": 2,
+      "secs": 23,
+      "answer": "Não cabe a aplicação de multa cominatória (astreintes) na ação de exibição de documentos, seja ela autônoma ou incidental, em razão de envolver direito disponível [1] [2].\n\n**Precedentes:**\n\n*   **Tema Repetitivo 705 (STJ):** Tese firmada pela Segunda Seção (Trânsito em Julgado), estabelecendo o descabimento de multa cominatória na exibição, incidental ou autônoma, de documento relativo a direito disponível [2].\n*   **Súmula 372 (STJ):** Enunciado em situação \"Vigente\", que veda a aplicação de multa cominatória na ação de exibição de documentos [1]."
+    },
+    {
+      "id": "dano-moral-pessoa-juridica",
+      "ok": true,
+      "fails": [],
+      "notes": [
+        "gold: SUM 227"
+      ],
+      "sources": 15,
+      "secs": 37,
+      "answer": "Sim. Conforme entendimento consolidado pelo Superior Tribunal de Justiça, a pessoa jurídica pode sofrer dano moral [1].\n\nEste posicionamento encontra-se cristalizado na Súmula 227 do STJ, sob a qual a referida tese encontra-se vigente [1]."
+    },
+    {
+      "id": "cotas-condominiais-preferencia",
+      "ok": true,
+      "fails": [],
+      "notes": [
+        "gold: SUM 478"
+      ],
+      "sources": 13,
+      "secs": 19,
+      "answer": "Sim. Na execução de crédito relativo a cotas condominiais, este possui preferência sobre o crédito hipotecário [1]. O entendimento está consolidado pela Súmula 478 do STJ, que se encontra vigente [1]."
+    },
+    {
+      "id": "concessionaria-rodovia-animais",
+      "ok": true,
+      "fails": [],
+      "notes": [
+        "gold: RR 1122"
+      ],
+      "sources": 5,
+      "secs": 37,
+      "answer": "Sim. As concessionárias de rodovias respondem objetivamente pelos danos decorrentes de acidentes causados pela presença de animais na pista de rolamento [4].\n\nO entendimento está consolidado sob a tese de que a presença de animais em vias pedagiadas caracteriza falha na prestação do serviço, impondo o risco da atividade à concessionária [2, 4]. Aplica-se o Código de Defesa do Consumidor e a Lei das Concessões [4].\n\n**Precedente:**\n*   **RR 1122** (Recurso Repetitivo, com trânsito em julgado) [4].\n\n*Nota: O precedente RR 1122 é vinculante e possui situação \"Transitado em julgado\" [4]. Jurisprudência isolada de tribunais estaduais, como a da 13ª Câmara Cível do TJMG, alinha-se a este entendimento [2].*"
+    },
+    {
+      "id": "icms-base-pis-cofins",
+      "ok": true,
+      "fails": [],
+      "notes": [
+        "gold: RG 69"
+      ],
+      "sources": 3,
+      "secs": 30,
+      "answer": "Não, o ICMS não compõe a base de cálculo do PIS e da COFINS [1].\n\nEsta tese possui repercussão geral consolidada pelo STF (Tema 69, leading case RE 574706, trânsito em julgado) [1].\n\nQuanto ao ICMS-Difal, a 1ª Seção do STJ fixou tese vinculante no Tema 1.272 (recurso repetitivo), estabelecendo que este também não deve ser incluído na base de cálculo das referidas contribuições [3].\n\nRessalte-se que há pendência de definição pelo STJ, sob o Tema 704 (controvérsia vinculada ao tema do STJ), sobre a possibilidade de apuração de créditos de PIS/COFINS sobre o valor do ICMS incidente na aquisição, à luz das Leis n. 10.637/2002 e n. 10.833/2003, conforme redação conferida pela Lei n. 14.592/2023 [2]. A situação deste precedente é \"Controvérsia vinculada ao tema do STJ\" [2]."
+    },
+    {
+      "id": "repeticao-indebito-juros-selic",
+      "ok": true,
+      "fails": [],
+      "notes": [
+        "gold: RR 145"
+      ],
+      "sources": 15,
+      "secs": 34,
+      "answer": "A aplicação do índice de atualização monetária na repetição de indébito tributário depende da esfera federativa do ente tributante e da vigência de precedentes específicos.\n\n### Âmbito Federal\nA Taxa SELIC é o índice aplicável à atualização monetária do indébito tributário federal a partir de 1º de janeiro de 1996, conforme tese firmada no **Tema Repetitivo 145** do Superior Tribunal de Justiça (rito: Recurso Repetitivo, trânsito em julgado) [6]. A SELIC não pode ser cumulada com qualquer outro índice de juros ou correção monetária [6].\n\n### Âmbito Estadual e Municipal\nA definição do índice observa a legislação do ente, observando-se os seguintes precedentes:\n\n*   **Estados:** Emprega-se a Taxa SELIC a partir de 1º de fevereiro de 2000, conforme a **Súmula 165 do TJPE** (rito: Súmula, vigente) [7]. Para períodos anteriores, aplica-se o indexador eleito pela legislação estadual específica [7].\n*   **Municípios:** Deve ser empregado o mesmo índice utilizado pelo legislador local para a atualização dos débitos fiscais municipais, conforme a **Súmula 166 do TJPE** (rito: Súmula, vigente) [2]. \n*   **Limite Constitucional:** O Supremo Tribunal Federal, ao julgar o **Tema 1.217** (RE 1.346.152/SP, rito: Repercussão Geral, trânsito em julgado), fixou que os Municípios não podem adotar, em seus créditos, índices de atualização superiores aos aplicados pela União para o mesmo fim, servindo a Taxa SELIC como teto [14].\n\n*Nota: O STF reconheceu a repercussão geral do **Tema 1.457**, que discute o termo inicial para a incidência da Taxa SELIC (citação versus vencimento de cada parcela) em débitos da Fazenda Pública, matéria atualmente pendente de julgamento definitivo [12].*"
+    },
+    {
+      "id": "usucapiao-extraordinaria",
+      "ok": true,
+      "fails": [],
+      "notes": [
+        "gold: RR 985"
+      ],
+      "sources": 4,
+      "secs": 29,
+      "answer": "O STJ não consolidou, por meio de súmula ou tese de recurso repetitivo, um rol exaustivo de requisitos para a usucapião extraordinária. A jurisprudência da Corte aplica os elementos previstos no Código Civil.\n\nNo que tange aos limites territoriais da área objeto da pretensão, o STJ firmou o entendimento, via rito de recurso repetitivo, de que o reconhecimento da usucapião extraordinária não pode ser obstado pelo fato de a área ser inferior ao módulo estabelecido em lei municipal [3].\n\nQuanto à tramitação, o entendimento consolidado em Incidente de Assunção de Competência (IAC) pelo TJRJ, embora não vinculante para o STJ, esclarece que a usucapião extraordinária pode ser buscada diretamente pela via judicial, sem necessidade de prévio procedimento extrajudicial [4].\n\nO precedente do STJ identificado como RR 985 encontra-se com trânsito em julgado [3]. Outros requisitos, como o prazo e a natureza da posse, são regidos pela legislação civil substantiva, não havendo tese vinculante do STJ sobre a configuração específica desses elementos na ausência de litígios tributários ou administrativos que demandem uniformização."
+    },
+    {
+      "id": "terco-ferias-contribuicao",
+      "ok": false,
+      "fails": [
+        "retrieval: nenhum de [RG 985, RG 163] nas fontes"
+      ],
+      "notes": [],
+      "sources": 15,
+      "secs": 26,
+      "answer": "Sim. O Supremo Tribunal Federal, em sede de repercussão geral, fixou a tese de que o adicional de 1/3 (um terço) previsto no art. 7º, XVII, da Constituição Federal incide sobre a remuneração relativa a todo o período de férias [6].\n\nO precedente possui trânsito em julgado e a tese está firmada no Tema de Repercussão Geral 1.241 (RE 1.400.787) [6]."
+    },
+    {
+      "id": "tema-inexistente",
+      "ok": true,
+      "fails": [],
+      "notes": [
+        "recusou corretamente"
+      ],
+      "sources": 1,
+      "secs": 8,
+      "answer": "O Tema 9999 do STJ não foi localizado na base de precedentes qualificados. A consulta à base de repetitivos do STJ retornou página sem conteúdo [1]. Recomenda-se a conferência manual diretamente no portal do Superior Tribunal de Justiça (aba \"Precedentes Qualificados\") para verificar se houve erro de digitação ou se a numeração refere-se a um tema ainda não afetado ou sob outra nomenclatura."
+    },
+    {
+      "id": "scon-bloqueado",
+      "ok": true,
+      "fails": [],
+      "notes": [],
+      "sources": 5,
+      "secs": 55,
+      "answer": "A Súmula 7 do Superior Tribunal de Justiça estabelece: \"A pretensão de simples reexame de prova não enseja recurso especial\" [3], [5]."
+    }
+  ]
+}
