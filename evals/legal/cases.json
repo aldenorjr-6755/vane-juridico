@@ -104,7 +104,11 @@
       "gold": [
         "RG 69",
         "Tema 69"
-      ]
+      ],
+      "must_cite": [
+        "69"
+      ],
+      "nota": "STF RG 69: 'O ICMS nao compoe a base de calculo para a incidencia do PIS e da COFINS'. O STJ tem RR 1223 e RR 1125 sobre recortes proximos; responder por eles sem citar a RG 69 e' eleger o precedente errado."
     },
     {
       "id": "repeticao-indebito-juros-selic",
@@ -129,7 +133,10 @@
         "RG 985",
         "RG 163"
       ],
-      "nota": "RG 985 e RG 163 apontam em sentidos diferentes; a resposta não deve apresentar um deles como pacífico sem mencionar o outro."
+      "nota": "STF RG 985 e' a on-point ('E' legitima a incidencia de contribuicao social sobre o valor satisfeito a titulo de terco'). A RG 163 aponta em sentido diferente para verba nao incorporavel; a resposta nao pode dar uma como pacifica sozinha.",
+      "must_cite": [
+        "985"
+      ]
     },
     {
       "id": "tema-inexistente",
@@ -154,6 +161,21 @@
       "query": "Qual o inteiro teor da Súmula 7 do STJ conforme o SCON?",
       "gold": [],
       "nota": "scon.stj.jus.br responde 403 mesmo a navegador real. Aqui só se verifica pureza da whitelist e ausência de identificador inventado."
+    },
+    {
+      "id": "trf-jurisprudencia-regional",
+      "query": "Como os Tribunais Regionais Federais têm decidido sobre prescrição intercorrente na execução fiscal?",
+      "gold": [
+        "TRF1",
+        "TRF2",
+        "TRF3",
+        "TRF4",
+        "TRF5",
+        "TRF6",
+        "TRF01",
+        "TRF03"
+      ],
+      "nota": "Acordao comum de TRF so' existe no CJF, e o portal so' devolve documentos com UM tribunal selecionado - por isso ha uma instancia da engine por tribunal. Este caso falha se a cobertura regional nao chegar as fontes."
     }
   ]
 }
