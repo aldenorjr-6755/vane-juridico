@@ -39,6 +39,7 @@ const STF_JURISPRUDENCIA_URL =
 const buildQueryPlan = (
   queries: string[],
   recency?: 'day' | 'week' | 'month' | 'year',
+  standaloneQuery?: string,
 ): SearchQuery[] => {
   const sources = getEnabledLegalSources();
   const base = { language: 'pt-BR', ...(recency ? { time_range: recency } : {}) };
@@ -50,11 +51,22 @@ const buildQueryPlan = (
     .map((s) => s.engine as string);
 
   /* The site's own search, through a dedicated SearXNG engine. One request per
-     query covers every native source at once and costs no CSE quota. */
+     query covers every native source at once and costs no CSE quota.
+     The user's own question goes in alongside the researcher's rewrites: the
+     official bases match the question's wording better than the rewrite, and
+     losing the governing precedent to a reformulation is a measured failure -
+     "Incide contribuição previdenciária sobre o terço constitucional de
+     férias?" finds RG 985 first, while the rewrite that replaced it did not. */
   if (nativeEngines.length > 0) {
-    queries.forEach((q) =>
-      plan.push({ q, searchConfig: { ...base, engines: nativeEngines } }),
-    );
+    const nativas = standaloneQuery ? [standaloneQuery, ...queries] : queries;
+    const vistas = new Set<string>();
+
+    nativas.forEach((q) => {
+      const chave = q.trim().toLowerCase();
+      if (!q.trim() || vistas.has(chave)) return;
+      vistas.add(chave);
+      plan.push({ q, searchConfig: { ...base, engines: nativeEngines } });
+    });
   }
 
   /* Round-robin so the budget is spread across hosts instead of being spent on
@@ -95,7 +107,7 @@ const buildQueryPlan = (
 };
 
 const actionDescription = `
-Use esta ferramenta para pesquisa jurídica brasileira. Ela consulta apenas fontes jurídicas confiáveis: o **BNP - Banco Nacional de Precedentes do CNJ** e a base de **temas repetitivos do STJ** (precedente qualificado oficial, com tese e situação), Consultor Jurídico, Migalhas e JusBrasil (doutrina e notícia), Dizer o Direito (comentários de jurisprudência e Informativos do STF/STJ), STF e Planalto (lei seca). Todo resultado fora desses domínios é descartado.
+Use esta ferramenta para pesquisa jurídica brasileira. Ela consulta apenas fontes jurídicas confiáveis: o **BNP - Banco Nacional de Precedentes do CNJ** e a base de **temas repetitivos do STJ** (precedente qualificado oficial, com tese e situação), Consultor Jurídico, Migalhas e JusBrasil (doutrina e notícia), Dizer o Direito (comentários de jurisprudência e Informativos do STF/STJ), a **Jurisprudência Unificada do CJF** (acórdãos do STJ, TNU, Turmas Recursais e TRFs, com ementa, relator e número real do processo), STF e Planalto (lei seca). Todo resultado fora desses domínios é descartado.
 
 Use sempre que a pergunta envolver lei, artigo, súmula, tema repetitivo, REsp, RE, HC, ADI, jurisprudência, prazo, tese firmada ou o nome de um tribunal.
 
@@ -114,7 +126,7 @@ const legalSearchAction: ResearchAction<typeof schema> = {
   schema: schema,
   getDescription: () => actionDescription,
   getToolDescription: () =>
-    'Pesquisa jurídica brasileira restrita a fontes confiáveis (BNP/CNJ, temas repetitivos do STJ, Conjur, Migalhas, JusBrasil, Dizer o Direito, STF, Planalto). Use para lei, súmula, tema repetitivo, jurisprudência, prazo e tese firmada.',
+    'Pesquisa jurídica brasileira restrita a fontes confiáveis (BNP/CNJ, temas repetitivos do STJ, CJF, Conjur, Migalhas, JusBrasil, Dizer o Direito, STF, Planalto). Use para lei, súmula, tema repetitivo, jurisprudência, prazo e tese firmada.',
   /* Deliberately NOT gated on `classification.legalSearch`, unlike the academic
      and discussion actions. Turning "Jurídico" on is an explicit act by the
      user and a stronger signal than the classifier; if the classifier missed
@@ -139,7 +151,11 @@ const legalSearchAction: ResearchAction<typeof schema> = {
       llm: additionalConfig.llm,
       embedding: additionalConfig.embedding,
       mode: additionalConfig.mode,
-      queries: buildQueryPlan(queries, input.recency),
+      queries: buildQueryPlan(
+        queries,
+        input.recency,
+        additionalConfig.standaloneQuery,
+      ),
       researchBlock: researchBlock,
       session: additionalConfig.session,
       /* Never trust that the engine honoured `site:` - the bing web engine

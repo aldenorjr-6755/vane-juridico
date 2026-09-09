@@ -91,12 +91,14 @@ COPY searxng/engines/conjur.py /usr/local/searxng/searxng-src/searx/engines/conj
 COPY searxng/engines/dizerodireito.py /usr/local/searxng/searxng-src/searx/engines/dizerodireito.py
 COPY searxng/engines/stjrepetitivos.py /usr/local/searxng/searxng-src/searx/engines/stjrepetitivos.py
 COPY searxng/engines/bnp.py /usr/local/searxng/searxng-src/searx/engines/bnp.py
+COPY searxng/engines/cjf.py /usr/local/searxng/searxng-src/searx/engines/cjf.py
 RUN chown searxng:searxng \
     /usr/local/searxng/searxng-src/searx/engines/migalhas.py \
     /usr/local/searxng/searxng-src/searx/engines/conjur.py \
     /usr/local/searxng/searxng-src/searx/engines/dizerodireito.py \
     /usr/local/searxng/searxng-src/searx/engines/stjrepetitivos.py \
-    /usr/local/searxng/searxng-src/searx/engines/bnp.py
+    /usr/local/searxng/searxng-src/searx/engines/bnp.py \
+    /usr/local/searxng/searxng-src/searx/engines/cjf.py
 
 WORKDIR /home/vane
 COPY entrypoint.sh ./entrypoint.sh

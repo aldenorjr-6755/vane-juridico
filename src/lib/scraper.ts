@@ -27,6 +27,7 @@ const THROTTLED_HOSTS = [
   'dizerodireito.com.br',
   'jusbrasil.com.br',
   'pangeabnp.pdpj.jus.br',
+  'jurisprudencia.cjf.jus.br',
 ];
 
 const HOST_MIN_INTERVAL_MS = 3000;

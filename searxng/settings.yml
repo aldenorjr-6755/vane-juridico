@@ -42,6 +42,11 @@ engines:
     shortcut: bnp
     disabled: true
     timeout: 15.0
+  - name: cjf
+    engine: cjf
+    shortcut: cjf
+    disabled: true
+    timeout: 30.0
 
   # Required by Vane
   - name: wolframalpha

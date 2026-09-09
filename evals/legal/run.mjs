@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S node --experimental-strip-types
 /**
  * Avaliação do modo Jurídico.
  *
@@ -37,15 +37,19 @@ const EMBED_PROVIDER =
   process.env.VANE_EMBED_PROVIDER ?? 'a07fbfdd-1a9b-40f6-b729-92150936de0a';
 const EMBED_MODEL = process.env.VANE_EMBED_MODEL ?? 'Xenova/all-MiniLM-L6-v2';
 
+/**
+ * A whitelist vem do próprio registro de fontes, não de uma cópia.
+ * Duplicá-la já quebrou este eval uma vez: ao ligar o CJF, dez casos falharam
+ * por "fora da whitelist" enquanto o Vane filtrava certo - o desatualizado era
+ * o teste. `sources.ts` não tem imports nem dependência de runtime, então o
+ * type-stripping do Node o carrega direto.
+ */
+const { LEGAL_SOURCES } = await import(
+  new URL('../../src/lib/legal/sources.ts', import.meta.url).href
+);
+
 const ALLOWED_HOSTS = [
-  'conjur.com.br',
-  'migalhas.com.br',
-  'stj.jus.br',
-  'stf.jus.br',
-  'planalto.gov.br',
-  'dizerodireito.com.br',
-  'jusbrasil.com.br',
-  'pdpj.jus.br',
+  ...new Set(LEGAL_SOURCES.filter((s) => s.enabled).flatMap((s) => s.hosts)),
 ];
 
 const args = process.argv.slice(2);

@@ -162,6 +162,8 @@ class Researcher {
       });
 
       const actionResults = await ActionRegistry.executeAll(finalToolCalls, {
+        standaloneQuery:
+          input.classification.standaloneFollowUp || input.followUp,
         llm: input.config.llm,
         embedding: input.config.embedding,
         session: session,

@@ -165,6 +165,22 @@ export const LEGAL_SOURCES: LegalSource[] = [
     enabled: true,
   },
   {
+    key: 'cjf',
+    label: 'CJF - Jurisprudência Unificada da Justiça Federal',
+    hosts: ['jurisprudencia.cjf.jus.br'],
+    /* Portal oficial do Conselho da Justiça Federal: STJ, TNU, Turmas
+       Recursais e os seis TRFs num só acervo, com ementa, relator, órgão
+       julgador e o **número real do processo** - material anti-invenção.
+       E' um app JSF com estado (ViewState + cookie de sessão), então a engine
+       faz GET no formulário e depois POST; e só devolve documentos com UM
+       tribunal selecionado - com vários, vêm apenas os totais. O padrão é STJ.
+       Sem `cse`: o conteúdo só existe atrás do POST, o Google não indexa. */
+    discovery: ['native'],
+    engine: 'cjf',
+    kind: 'tribunal',
+    enabled: true,
+  },
+  {
     key: 'scon',
     label: 'STJ SCON (súmulas, inteiro teor)',
     hosts: ['scon.stj.jus.br'],

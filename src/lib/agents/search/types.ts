@@ -67,6 +67,14 @@ export type AdditionalConfig = {
   llm: BaseLLM<any>;
   embedding: BaseEmbedding<any>;
   session: SessionManager;
+  /**
+   * A pergunta do usuário, já autocontida. As ações recebem as consultas que o
+   * pesquisador reescreveu; a busca jurídica também precisa da pergunta como
+   * ela foi feita, porque as bases oficiais casam melhor com os termos do
+   * usuário do que com a reformulação - medido em 2026-09-08, quando a
+   * reformulação perdeu a RG 985 que a pergunta crua encontra em primeiro lugar.
+   */
+  standaloneQuery?: string;
 };
 
 export type ResearcherInput = {
