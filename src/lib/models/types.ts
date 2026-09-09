@@ -47,6 +47,12 @@ type ToolCall = {
   id: string;
   name: string;
   arguments: Record<string, any>;
+  /**
+   * Provider-specific passthrough attached to a tool call. Gemini 3.x returns
+   * `extra_content.google.thought_signature` here and rejects any later request
+   * that replays the tool call without it. Other providers omit this.
+   */
+  extraContent?: Record<string, any>;
 };
 
 type GenerateTextInput = {

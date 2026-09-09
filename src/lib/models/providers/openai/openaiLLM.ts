@@ -60,6 +60,7 @@ class OpenAILLM extends BaseLLM<OpenAIConfig> {
                   name: tc.name,
                   arguments: JSON.stringify(tc.arguments),
                 },
+                ...(tc.extraContent && { extra_content: tc.extraContent }),
               })),
             }),
         } as ChatCompletionAssistantMessageParam;
@@ -111,6 +112,9 @@ class OpenAILLM extends BaseLLM<OpenAIConfig> {
                   name: tc.function.name,
                   id: tc.id,
                   arguments: JSON.parse(tc.function.arguments),
+                  ...((tc as any).extra_content && {
+                    extraContent: (tc as any).extra_content,
+                  }),
                 };
               }
             })
@@ -158,8 +162,12 @@ class OpenAILLM extends BaseLLM<OpenAIConfig> {
       stream: true,
     });
 
-    let recievedToolCalls: { name: string; id: string; arguments: string }[] =
-      [];
+    let recievedToolCalls: {
+      name: string;
+      id: string;
+      arguments: string;
+      extraContent?: Record<string, any>;
+    }[] = [];
 
     for await (const chunk of stream) {
       if (chunk.choices && chunk.choices.length > 0) {
@@ -168,17 +176,22 @@ class OpenAILLM extends BaseLLM<OpenAIConfig> {
           contentChunk: chunk.choices[0].delta.content || '',
           toolCallChunk:
             toolCalls?.map((tc) => {
+              const extraContent = (tc as any).extra_content;
               if (!recievedToolCalls[tc.index]) {
                 const call = {
                   name: tc.function?.name!,
                   id: tc.id!,
                   arguments: tc.function?.arguments || '',
+                  ...(extraContent && { extraContent }),
                 };
                 recievedToolCalls.push(call);
                 return { ...call, arguments: parse(call.arguments || '{}') };
               } else {
                 const existingCall = recievedToolCalls[tc.index];
                 existingCall.arguments += tc.function?.arguments || '';
+                if (extraContent && !existingCall.extraContent) {
+                  existingCall.extraContent = extraContent;
+                }
                 return {
                   ...existingCall,
                   arguments: parse(existingCall.arguments),

@@ -48,7 +48,21 @@ const socialSearchAction: ResearchAction<typeof schema> = {
       researchBlock: researchBlock,
       session: additionalConfig.session,
       searchConfig: {
-        engines: ['reddit'],
+        // 'reddit' does not exist in the bundled SearxNG. An unknown engine name
+        // is not an error there - SearxNG silently ignores it and falls back to
+        // the default `general` engines, so this action was returning ordinary
+        // web results while claiming to be a discussion search.
+        // These five are the ones that actually answer from this network
+        // (verified 2026-09-01); they stay `disabled: true` in settings.yml on
+        // purpose, since naming them here activates them without polluting
+        // every normal web search with forum noise.
+        engines: [
+          'hackernews',
+          'lemmy posts',
+          'lemmy comments',
+          'mastodon hashtags',
+          'boardreader',
+        ],
       },
     });
 
