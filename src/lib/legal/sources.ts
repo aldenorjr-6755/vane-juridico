@@ -91,7 +91,11 @@ export const LEGAL_SOURCES: LegalSource[] = [
        free text (`pesquisa_livre`), which is the only tribunal path that does
        not spend from the shared `google cse` quota. Its query has to be
        percent-encoded in latin-1: in UTF-8 the base answers 0 results with
-       HTTP 200. */
+       HTTP 200.
+       Notícia do STJ chega por aqui também: `google cse` + `site:stj.jus.br`
+       devolve as páginas de `/Paginas/Comunicacao/Noticias/`, e a página
+       individual responde 200 (é a listagem que dá 403). `bing news` não
+       indexa este host - responde com parsing error. */
     discovery: ['native', 'cse'],
     engine: 'stj repetitivos',
     kind: 'tribunal',
@@ -189,16 +193,13 @@ export const LEGAL_SOURCES: LegalSource[] = [
        documentos com UM selecionado - com vários vêm apenas os totais. O
        SearXNG roda as instâncias em paralelo dentro de uma única consulta,
        então a cobertura sai sem custar uma requisição do Vane por tribunal. */
-    engine: [
-      'cjf stj',
-      'cjf tnu',
-      'cjf trf1',
-      'cjf trf2',
-      'cjf trf3',
-      'cjf trf4',
-      'cjf trf5',
-      'cjf trf6',
-    ],
+    /* Três tribunais, não oito. Com as oito instâncias a pergunta regional
+       estourou 300 s e morreu no `headersTimeout` do undici - o custo é GET
+       mais POST por instância, num app JSF. TRF1, TRF4 e TRF5 cobrem as
+       regiões de maior volume; as outras cinco continuam **declaradas** no
+       settings.yml de propósito, para que reativar uma aqui não caia no
+       fallback silencioso do SearXNG por engine não declarada. */
+    engine: ['cjf trf1', 'cjf trf4', 'cjf trf5'],
     kind: 'tribunal',
     tier: 'authority',
     enabled: true,
@@ -220,6 +221,52 @@ export const LEGAL_SOURCES: LegalSource[] = [
     discovery: ['none'],
     kind: 'tribunal',
     enabled: false,
+  },
+  {
+    key: 'ibccrim',
+    label: 'IBCCRIM - Instituto Brasileiro de Ciências Criminais',
+    hosts: ['ibccrim.org.br'],
+    siteQuery: 'ibccrim.org.br',
+    /* Doutrina e notícia de penal e processo penal. WordPress com REST aberta
+       e - ao contrário do Conjur - `posts?search=` **funciona**, então a engine
+       é uma chamada só. `robots.txt` libera tudo.
+       O domínio é **.org.br**; o `.com.br` não resolve (medido: HTTP 000).
+       Sem `news`: `bing news` responde `site:ibccrim.org.br` com parsing error.
+       A recência vem do próprio campo `date` da API. */
+    discovery: ['native', 'cse'],
+    engine: 'ibccrim',
+    kind: 'doutrina',
+    enabled: true,
+  },
+  {
+    key: 'trf1',
+    label: 'TRF1 (notícias)',
+    hosts: ['trf1.jus.br'],
+    siteQuery: 'trf1.jus.br',
+    /* Notícias institucionais do Tribunal Regional Federal da 1ª Região.
+       É o único dos tribunais aqui que o `bing news` de fato indexa - medido
+       10/10 no domínio, contra parsing error para STJ, TJMA e IBCCRIM. Por
+       isso ganha o caminho de recência além do `google cse` (20/20).
+       Jurisprudência do TRF1 não vem daqui: vem do CJF (`cjf trf1`). */
+    discovery: ['cse', 'news'],
+    kind: 'noticia',
+    enabled: true,
+  },
+  {
+    key: 'tjma-noticias',
+    label: 'TJMA (notícias)',
+    hosts: ['tjma.jus.br'],
+    siteQuery: 'tjma.jus.br',
+    /* Notícias do Judiciário do Maranhão, em `/midia/<orgao>/noticia/<id>/`.
+       Página individual responde 200 e é legível.
+       Não confundir com a entrada `tjma`, que é o Jurisconsult (jurisprudência)
+       e continua desligada por estar atrás de CAPTCHA. São hosts distintos, e
+       a resolução por host mais específico mantém `jurisconsult.tjma.jus.br`
+       apontando para a entrada desligada.
+       Sem `news`: `bing news` responde com parsing error. */
+    discovery: ['cse'],
+    kind: 'noticia',
+    enabled: true,
   },
   {
     key: 'scon',

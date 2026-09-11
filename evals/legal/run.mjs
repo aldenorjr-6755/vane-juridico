@@ -56,6 +56,18 @@ const args = process.argv.slice(2);
 const only = args.includes('--case') ? args[args.indexOf('--case') + 1] : null;
 const mode = args.includes('--mode') ? args[args.indexOf('--mode') + 1] : 'balanced';
 
+/**
+ * Quantas vezes cada caso roda. Um caso passa por MAIORIA, não por sorte.
+ *
+ * Medido em 2026-09-10: `multa-cominatoria`, `cotas-condominiais`,
+ * `terco-ferias` e `icms` passam em 2 de 4 execuções. Todos falham pelo mesmo
+ * check - `must_cite`, que depende da redação do modelo e não da busca - e a
+ * falha se concentra nas rodadas com MAIS fontes no contexto (24-26 nas falhas,
+ * 9-20 nos acertos). Com uma execução só, a suíte reporta ±2 pontos de ruído, e
+ * foi assim que eu quase li 12/13 -> 10/13 como regressão quando era moeda.
+ */
+const runs = args.includes('--runs') ? Number(args[args.indexOf('--runs') + 1]) : 3;
+
 const { cases } = JSON.parse(
   fs.readFileSync(path.join(HERE, 'cases.json'), 'utf-8'),
 );
@@ -174,53 +186,88 @@ const check = (c, answer, sources) => {
 const main = async () => {
   const selected = only ? cases.filter((c) => c.id === only) : cases;
   const report = [];
-  let failed = 0;
+  let reprovados = 0;
+  let instaveis = 0;
 
-  console.log(`modo=${mode}  modelo=${CHAT_MODEL}  casos=${selected.length}\n`);
+  console.log(
+    `modo=${mode}  modelo=${CHAT_MODEL}  casos=${selected.length}  rodadas=${runs}\n`,
+  );
 
   for (const c of selected) {
-    const t0 = Date.now();
-    let answer = '';
-    let sources = [];
-    let erro = null;
+    const tentativas = [];
 
-    try {
-      const r = await ask(c.query);
-      answer = r.message ?? '';
-      sources = r.sources ?? [];
-    } catch (e) {
-      erro = String(e).slice(0, 90);
+    for (let i = 0; i < runs; i++) {
+      const t0 = Date.now();
+
+      try {
+        const r = await ask(c.query);
+        const { fails, notes } = check(c, r.message ?? '', r.sources ?? []);
+        tentativas.push({
+          ok: fails.length === 0,
+          fails,
+          notes,
+          sources: (r.sources ?? []).length,
+          secs: Math.round((Date.now() - t0) / 1000),
+        });
+      } catch (e) {
+        tentativas.push({
+          ok: false,
+          fails: [`erro: ${String(e).slice(0, 70)}`],
+          notes: [],
+          sources: 0,
+          secs: Math.round((Date.now() - t0) / 1000),
+        });
+      }
     }
 
-    const secs = ((Date.now() - t0) / 1000).toFixed(0);
+    const passou = tentativas.filter((t) => t.ok).length;
+    const ok = passou * 2 > runs;
+    const instavel = passou > 0 && passou < runs;
 
-    if (erro) {
-      failed++;
-      console.log(`FALHA  ${c.id}  (${secs}s)\n         erro: ${erro}`);
-      report.push({ id: c.id, ok: false, erro });
-      continue;
-    }
+    if (!ok) reprovados++;
+    if (instavel) instaveis++;
 
-    const { fails, notes } = check(c, answer, sources);
-    const ok = fails.length === 0;
-    if (!ok) failed++;
+    const fontes = tentativas.map((t) => t.sources);
+    const segundos = tentativas.map((t) => t.secs);
+    const rotulo = ok ? (instavel ? 'INST ' : 'OK   ') : 'FALHA';
 
     console.log(
-      `${ok ? 'OK   ' : 'FALHA'}  ${c.id.padEnd(38)} ${secs}s  ${sources.length} fontes`,
+      `${rotulo}  ${c.id.padEnd(38)} ${passou}/${runs}  ${Math.round(
+        segundos.reduce((a, b) => a + b, 0) / runs,
+      )}s méd  fontes ${Math.min(...fontes)}-${Math.max(...fontes)}`,
     );
-    for (const n of notes) console.log(`         · ${n}`);
-    for (const f of fails) console.log(`         ✗ ${f}`);
 
-    report.push({ id: c.id, ok, fails, notes, sources: sources.length, secs: +secs, answer });
+    /* Motivos distintos entre as rodadas: numa suíte instável, saber QUAL
+       check falhou importa mais do que quantas vezes. */
+    const motivos = [...new Set(tentativas.flatMap((t) => t.fails))];
+    for (const m of motivos) console.log(`         ✗ ${m}`);
+
+    report.push({
+      id: c.id,
+      ok,
+      instavel,
+      taxa: `${passou}/${runs}`,
+      motivos,
+      tentativas,
+    });
   }
 
   const out = path.join(HERE, 'last-run.json');
-  fs.writeFileSync(out, JSON.stringify({ mode, model: CHAT_MODEL, at: new Date().toISOString(), report }, null, 2));
+  fs.writeFileSync(
+    out,
+    JSON.stringify(
+      { mode, model: CHAT_MODEL, runs, at: new Date().toISOString(), report },
+      null,
+      2,
+    ),
+  );
 
   console.log(
-    `\n${selected.length - failed}/${selected.length} passaram. Relatório: ${out}`,
+    `\n${selected.length - reprovados}/${selected.length} por maioria` +
+      (instaveis > 0 ? ` · ${instaveis} instável(eis)` : '') +
+      `. Relatório: ${out}`,
   );
-  process.exit(failed > 0 ? 1 : 0);
+  process.exit(reprovados > 0 ? 1 : 0);
 };
 
 main();

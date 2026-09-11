@@ -8,7 +8,17 @@ import { PDFParse } from 'pdf-parse';
 import { CanvasFactory } from 'pdf-parse/worker';
 import { hostOf } from './legal/sources';
 
-type ScrapeResult = { content: string; title: string };
+export type ScrapeLink = { href: string; text: string };
+
+/**
+ * `links` only comes from the browser adapter: the API adapters (WordPress,
+ * BNP, PDF) hand back a single record with nothing to navigate to. It exists
+ * for the `/api/scrape` route, where a caller collecting a journal archive
+ * needs the issue and article URLs, not just the page text.
+ */
+export type ScrapeResult = { content: string; title: string; links?: ScrapeLink[] };
+
+const MAX_LINKS = 400;
 
 const BROWSER_UA =
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36';
@@ -191,7 +201,11 @@ class Scraper {
 
       if (Date.now() - cached.fetchedAt > CACHE_TTL_MS) return undefined;
 
-      return { content: cached.content, title: cached.title };
+      return {
+        content: cached.content,
+        title: cached.title,
+        ...(cached.links ? { links: cached.links } : {}),
+      };
     } catch {
       return undefined;
     }
@@ -401,6 +415,28 @@ class Scraper {
       const html = await page.content();
       const title = await page.title();
 
+      const links: ScrapeLink[] = await page
+        .evaluate(() =>
+          Array.from(document.querySelectorAll('a[href]')).map((a) => ({
+            href: (a as HTMLAnchorElement).href,
+            text: ((a as HTMLElement).innerText || a.textContent || '')
+              .replace(/\s+/g, ' ')
+              .trim(),
+          })),
+        )
+        .then((all: ScrapeLink[]) => {
+          const seen = new Set<string>();
+          const out: ScrapeLink[] = [];
+          for (const l of all) {
+            if (!/^https?:/i.test(l.href) || seen.has(l.href)) continue;
+            seen.add(l.href);
+            out.push({ href: l.href, text: l.text.slice(0, 200) });
+            if (out.length >= MAX_LINKS) break;
+          }
+          return out;
+        })
+        .catch(() => []);
+
       const dom = new JSDOM(html, {
         url,
       });
@@ -433,6 +469,7 @@ class Scraper {
         ${content ?? 'No content available'}
         `,
         title,
+        links,
       };
     } catch (err) {
       console.log(`Error scraping ${url}:`, err);

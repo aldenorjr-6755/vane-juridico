@@ -48,6 +48,16 @@ engines:
     orgaos: ['STF', 'STJ', 'TST', 'TNU']
     disabled: true
     timeout: 15.0
+  # As oito instancias ficam declaradas, mas o sources.ts do Vane usa so' TRF1,
+  # TRF4 e TRF5 - com as oito a pergunta regional estourava 300s. Manter as
+  # demais declaradas evita que reativar uma no sources.ts caia no fallback
+  # silencioso do SearXNG (engine nao declarada nao da erro: ele ignora o nome
+  # e usa as engines gerais).
+  - name: ibccrim
+    engine: ibccrim
+    shortcut: ibc
+    disabled: true
+    timeout: 10.0
   - name: cjf stj
     engine: cjf
     shortcut: cjfstj
