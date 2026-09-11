@@ -425,15 +425,21 @@ class Scraper {
           })),
         )
         .then((all: ScrapeLink[]) => {
-          const seen = new Set<string>();
-          const out: ScrapeLink[] = [];
+          /* An OJS archive lists each issue twice: a cover image (no text) and
+             a titled link. Keyed by href, the first non-empty text wins, so the
+             caller sees the issue title instead of an empty string. */
+          const byHref = new Map<string, string>();
           for (const l of all) {
-            if (!/^https?:/i.test(l.href) || seen.has(l.href)) continue;
-            seen.add(l.href);
-            out.push({ href: l.href, text: l.text.slice(0, 200) });
-            if (out.length >= MAX_LINKS) break;
+            if (!/^https?:/i.test(l.href)) continue;
+            const current = byHref.get(l.href);
+            if (current === undefined) {
+              if (byHref.size >= MAX_LINKS) continue;
+              byHref.set(l.href, l.text.slice(0, 200));
+            } else if (!current && l.text) {
+              byHref.set(l.href, l.text.slice(0, 200));
+            }
           }
-          return out;
+          return Array.from(byHref, ([href, text]) => ({ href, text }));
         })
         .catch(() => []);
 

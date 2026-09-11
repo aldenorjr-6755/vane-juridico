@@ -59,7 +59,13 @@ const scrapeOne = async (url: string, maxChars: number): Promise<ScrapeItem> => 
 
   try {
     const result = await Scraper.scrape(url);
-    const content = result.content.trim();
+    /* Readability's textContent keeps the source's indentation: the RBCCRIM
+       archive came back with 16k chars of which most were blank lines. */
+    const content = result.content
+      .replace(/[ \t]+\n/g, '\n')
+      .replace(/\n[ \t]+/g, '\n')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
     const blocked = content.includes('FONTE BLOQUEADA');
     const failed = result.title === 'Failed to scrape';
 
