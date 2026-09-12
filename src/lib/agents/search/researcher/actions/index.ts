@@ -1,6 +1,7 @@
 import academicSearchAction from './search/academicSearch';
 import legalSearchAction from './search/legalSearch';
 import verifyLegalCitationAction from './verifyLegalCitation';
+import verifyGithubRepoAction from './verifyGithubRepo';
 import doneAction from './done';
 import planAction from './plan';
 import ActionRegistry from './registry';
@@ -18,5 +19,6 @@ ActionRegistry.register(academicSearchAction);
 ActionRegistry.register(socialSearchAction);
 ActionRegistry.register(legalSearchAction);
 ActionRegistry.register(verifyLegalCitationAction);
+ActionRegistry.register(verifyGithubRepoAction);
 
 export { ActionRegistry };
