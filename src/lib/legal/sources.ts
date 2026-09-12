@@ -119,6 +119,30 @@ export const LEGAL_SOURCES: LegalSource[] = [
     enabled: true,
   },
   {
+    key: 'cnj',
+    label: 'CNJ - Conselho Nacional de Justiça',
+    hosts: ['cnj.jus.br'],
+    siteQuery: 'cnj.jus.br',
+    /* Medido em 2026-09-12. O site roda em WordPress, mas ao contrário de
+       Conjur/STF-noticias/IBCCRIM a busca REST está neutralizada: `/wp-json/`
+       e `/wp-json/wp/v2/search` devolvem 403 (WAF), e `/wp-json/wp/v2/posts?
+       search=<termo>` devolve `200` com `[]` **mesmo para um termo confirmado
+       no título de um post que a listagem sem filtro acabou de trazer**
+       ("minicurso") - o parâmetro `search` está sendo neutralizado, não é
+       ausência de conteúdo. `/wp-json/wp/v2/types` também 403. Por isso
+       nenhum `native`: não há endpoint de busca que funcione.
+       `google cse` + `site:cnj.jus.br` compensa: 20/20 no domínio - notícias
+       institucionais, resoluções, atos normativos e até calculadoras/PDFs.
+       Sem `news`: `bing news` responde com parsing error, mesmo padrão de
+       STJ/Planalto/dizerodireito/JusBrasil para o TLD `.jus.br`/`.gov.br`.
+       `robots.txt` libera geral (`User-agent: * / Allow: /`); as regras que
+       desabilitam caminho por caminho valem só para `Googlebot` e mesmo assim
+       não tocam em conteúdo de notícia/resolução. */
+    discovery: ['cse'],
+    kind: 'tribunal',
+    enabled: true,
+  },
+  {
     key: 'stf-noticias',
     label: 'STF (notícias)',
     hosts: ['noticias.stf.jus.br', 'portal.stf.jus.br'],
