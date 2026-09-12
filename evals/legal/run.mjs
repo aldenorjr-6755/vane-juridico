@@ -32,7 +32,8 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const VANE = process.env.VANE_URL ?? 'http://localhost:3000';
 const CHAT_PROVIDER =
   process.env.VANE_CHAT_PROVIDER ?? '7b4e8fc5-7232-4eaf-9e6d-f344209809c2';
-const CHAT_MODEL = process.env.VANE_CHAT_MODEL ?? 'models/gemini-3.1-flash-lite';
+const CHAT_MODEL =
+  process.env.VANE_CHAT_MODEL ?? 'models/gemini-3.1-flash-lite';
 const EMBED_PROVIDER =
   process.env.VANE_EMBED_PROVIDER ?? 'a07fbfdd-1a9b-40f6-b729-92150936de0a';
 const EMBED_MODEL = process.env.VANE_EMBED_MODEL ?? 'Xenova/all-MiniLM-L6-v2';
@@ -54,7 +55,9 @@ const ALLOWED_HOSTS = [
 
 const args = process.argv.slice(2);
 const only = args.includes('--case') ? args[args.indexOf('--case') + 1] : null;
-const mode = args.includes('--mode') ? args[args.indexOf('--mode') + 1] : 'balanced';
+const mode = args.includes('--mode')
+  ? args[args.indexOf('--mode') + 1]
+  : 'balanced';
 
 /**
  * Quantas vezes cada caso roda. Um caso passa por MAIORIA, não por sorte.
@@ -66,7 +69,9 @@ const mode = args.includes('--mode') ? args[args.indexOf('--mode') + 1] : 'balan
  * 9-20 nos acertos). Com uma execução só, a suíte reporta ±2 pontos de ruído, e
  * foi assim que eu quase li 12/13 -> 10/13 como regressão quando era moeda.
  */
-const runs = args.includes('--runs') ? Number(args[args.indexOf('--runs') + 1]) : 3;
+const runs = args.includes('--runs')
+  ? Number(args[args.indexOf('--runs') + 1])
+  : 3;
 
 const { cases } = JSON.parse(
   fs.readFileSync(path.join(HERE, 'cases.json'), 'utf-8'),
@@ -74,10 +79,7 @@ const { cases } = JSON.parse(
 
 /** "Tema 1.162" e "RG 1162" têm que casar, então os pontos caem. */
 const norm = (s) =>
-  (s ?? '')
-    .toLowerCase()
-    .replace(/[. ]/g, '')
-    .replace(/\s+/g, ' ');
+  (s ?? '').toLowerCase().replace(/[. ]/g, '').replace(/\s+/g, ' ');
 
 const hostOf = (u) => {
   try {
@@ -132,7 +134,10 @@ const check = (c, answer, sources) => {
   const a = norm(answer);
   const srcText = norm(
     sources
-      .map((s) => `${s?.metadata?.title ?? ''} ${s?.metadata?.url ?? ''} ${s?.pageContent ?? s?.content ?? ''}`)
+      .map(
+        (s) =>
+          `${s?.metadata?.title ?? ''} ${s?.metadata?.url ?? ''} ${s?.pageContent ?? s?.content ?? ''}`,
+      )
       .join(' \n '),
   );
 
@@ -150,7 +155,8 @@ const check = (c, answer, sources) => {
   for (const m of c.must_cite ?? [])
     if (!a.includes(norm(m))) fails.push(`citation: falta "${m}" na resposta`);
   for (const m of c.must_not ?? [])
-    if (a.includes(norm(m))) fails.push(`proibido: "${m}" apareceu na resposta`);
+    if (a.includes(norm(m)))
+      fails.push(`proibido: "${m}" apareceu na resposta`);
 
   // 3. caveat de precedente não definitivo
   if (c.caveat_for) {
@@ -158,7 +164,9 @@ const check = (c, answer, sources) => {
       norm(s?.metadata?.title ?? '').includes(norm(c.caveat_for)),
     );
     if (cited) {
-      const ok = (c.caveat_words ?? []).some((w) => new RegExp(w, 'i').test(answer));
+      const ok = (c.caveat_words ?? []).some((w) =>
+        new RegExp(w, 'i').test(answer),
+      );
       if (ok) notes.push(`ressalva de "${c.caveat_for}" presente`);
       else fails.push(`caveat: fonte "${c.caveat_for}" citada sem ressalva`);
     }
@@ -166,14 +174,19 @@ const check = (c, answer, sources) => {
 
   // 4. recusa esperada
   if (c.expect_refusal) {
-    const ok = (c.refusal_words ?? []).some((w) => new RegExp(w, 'i').test(answer));
+    const ok = (c.refusal_words ?? []).some((w) =>
+      new RegExp(w, 'i').test(answer),
+    );
     if (ok) notes.push('recusou corretamente');
     else fails.push('refusal: não declarou que não encontrou');
   }
 
   // 5. whitelist
-  const fora = sources.map((s) => s?.metadata?.url ?? '').filter((u) => u && !onAllowedHost(u));
-  if (fora.length) fails.push(`whitelist: ${fora.length} fora (${hostOf(fora[0])})`);
+  const fora = sources
+    .map((s) => s?.metadata?.url ?? '')
+    .filter((u) => u && !onAllowedHost(u));
+  if (fora.length)
+    fails.push(`whitelist: ${fora.length} fora (${hostOf(fora[0])})`);
 
   // 6. identificadores inventados
   const inventados = identifiers(answer).filter((id) => !srcText.includes(id));

@@ -2,7 +2,10 @@ import z from 'zod';
 import { ResearchAction } from '../../../types';
 import { Chunk, ReadingResearchBlock, ResearchBlock } from '@/lib/types';
 import { executeSearch, SearchQuery } from './baseSearch';
-import { getEnabledLegalSources, isWhitelistedLegalUrl } from '@/lib/legal/sources';
+import {
+  getEnabledLegalSources,
+  isWhitelistedLegalUrl,
+} from '@/lib/legal/sources';
 import Scraper from '@/lib/scraper';
 
 const schema = z.object({
@@ -60,7 +63,10 @@ const pedeRegional = (q: string): boolean =>
 const temPrecedenteSuperior = (results: Chunk[]): boolean =>
   results.some((r) => {
     const titulo = r.metadata?.title ?? '';
-    return /^(STF|STJ|TST|TNU)\s*·/.test(titulo) || /·\s*(RG|SUM|SV)\s*\d/.test(titulo);
+    return (
+      /^(STF|STJ|TST|TNU)\s*·/.test(titulo) ||
+      /·\s*(RG|SUM|SV)\s*\d/.test(titulo)
+    );
   });
 
 const STF_JURISPRUDENCIA_URL =
@@ -72,12 +78,17 @@ const buildQueryPlan = (
   standaloneQuery?: string,
 ): SearchQuery[] => {
   const sources = getEnabledLegalSources();
-  const base = { language: 'pt-BR', ...(recency ? { time_range: recency } : {}) };
+  const base = {
+    language: 'pt-BR',
+    ...(recency ? { time_range: recency } : {}),
+  };
 
   const plan: SearchQuery[] = [];
 
   const enginesDe = (lista: typeof sources) =>
-    lista.flatMap((s) => (Array.isArray(s.engine) ? s.engine : [s.engine as string]));
+    lista.flatMap((s) =>
+      Array.isArray(s.engine) ? s.engine : [s.engine as string],
+    );
 
   const nativeEngines = enginesDe(
     sources.filter(
@@ -127,13 +138,17 @@ const buildQueryPlan = (
 
     const pairs: string[] = [];
 
-    queries.forEach((q) => hosts.forEach((host) => pairs.push(`site:${host} ${q}`)));
+    queries.forEach((q) =>
+      hosts.forEach((host) => pairs.push(`site:${host} ${q}`)),
+    );
 
     /* `site:a OR site:b` returns nothing on this CSE, so each host needs its
        own query. */
     pairs
       .slice(0, budget)
-      .forEach((q) => plan.push({ q, searchConfig: { ...base, engines: [engine] } }));
+      .forEach((q) =>
+        plan.push({ q, searchConfig: { ...base, engines: [engine] } }),
+      );
   };
 
   fanOut('cse', 'google cse', MAX_CSE_QUERIES);
@@ -162,7 +177,9 @@ const enginesAuthority = (incluir: boolean): string[] =>
   incluir
     ? getEnabledLegalSources()
         .filter((s) => s.tier === 'authority' && s.engine)
-        .flatMap((s) => (Array.isArray(s.engine) ? s.engine : [s.engine as string]))
+        .flatMap((s) =>
+          Array.isArray(s.engine) ? s.engine : [s.engine as string],
+        )
     : [];
 
 const legalSearchAction: ResearchAction<typeof schema> = {

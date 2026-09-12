@@ -30,21 +30,13 @@
         "RR 570",
         "RR 571"
       ],
-      "must_not": [
-        "1.604.412",
-        "1604412"
-      ],
+      "must_not": ["1.604.412", "1604412"],
       "nota": "O IAC 1.604.412/SC e' de execucao civil, nao fiscal - erro real de 2026-09-08. Os Temas 566-571 sao a familia do REsp 1.340.553/RS; qualquer um ancora a resposta."
     },
     {
       "id": "honorarios-prescricao-intercorrente",
       "query": "Cabe condenação em honorários advocatícios quando a execução fiscal é extinta por prescrição intercorrente?",
-      "gold": [
-        "RR 1229",
-        "Tema Repetitivo 1229",
-        "Tema 1.229",
-        "IRDR 4"
-      ],
+      "gold": ["RR 1229", "Tema Repetitivo 1229", "Tema 1.229", "IRDR 4"],
       "caveat_for": "RE Pendente",
       "caveat_words": [
         "pendente",
@@ -64,89 +56,54 @@
         "RR 1000",
         "Tema Repetitivo 1000"
       ],
-      "must_cite": [
-        "372"
-      ]
+      "must_cite": ["372"]
     },
     {
       "id": "dano-moral-pessoa-juridica",
       "query": "A pessoa jurídica pode sofrer dano moral, segundo o STJ?",
-      "gold": [
-        "SUM 227",
-        "Súmula 227"
-      ],
-      "must_cite": [
-        "227"
-      ]
+      "gold": ["SUM 227", "Súmula 227"],
+      "must_cite": ["227"]
     },
     {
       "id": "cotas-condominiais-preferencia",
       "query": "O crédito de cotas condominiais tem preferência sobre o crédito hipotecário na execução?",
-      "gold": [
-        "SUM 478",
-        "Súmula 478"
-      ],
-      "must_cite": [
-        "478"
-      ]
+      "gold": ["SUM 478", "Súmula 478"],
+      "must_cite": ["478"]
     },
     {
       "id": "concessionaria-rodovia-animais",
       "query": "A concessionária de rodovia responde por acidente causado por animal na pista?",
-      "gold": [
-        "RR 1122",
-        "Tema Repetitivo 1122"
-      ]
+      "gold": ["RR 1122", "Tema Repetitivo 1122"]
     },
     {
       "id": "icms-base-pis-cofins",
       "query": "O ICMS compõe a base de cálculo do PIS e da COFINS?",
-      "gold": [
-        "RG 69",
-        "Tema 69"
-      ],
-      "must_cite": [
-        "69"
-      ],
+      "gold": ["RG 69", "Tema 69"],
+      "must_cite": ["69"],
       "nota": "STF RG 69: 'O ICMS nao compoe a base de calculo para a incidencia do PIS e da COFINS'. O STJ tem RR 1223 e RR 1125 sobre recortes proximos; responder por eles sem citar a RG 69 e' eleger o precedente errado."
     },
     {
       "id": "repeticao-indebito-juros-selic",
       "query": "Qual índice se aplica na atualização da repetição de indébito tributário?",
-      "gold": [
-        "RR 145",
-        "SELIC"
-      ]
+      "gold": ["RR 145", "SELIC"]
     },
     {
       "id": "usucapiao-extraordinaria",
       "query": "Quais os requisitos reconhecidos pelo STJ para a usucapião extraordinária?",
-      "gold": [
-        "RR 985",
-        "Tema Repetitivo 985"
-      ]
+      "gold": ["RR 985", "Tema Repetitivo 985"]
     },
     {
       "id": "terco-ferias-contribuicao",
       "query": "Incide contribuição previdenciária sobre o terço constitucional de férias?",
-      "gold": [
-        "RG 985",
-        "RG 163"
-      ],
+      "gold": ["RG 985", "RG 163"],
       "nota": "STF RG 985 e' a on-point ('E' legitima a incidencia de contribuicao social sobre o valor satisfeito a titulo de terco'). A RG 163 aponta em sentido diferente para verba nao incorporavel; a resposta nao pode dar uma como pacifica sozinha.",
-      "must_cite": [
-        "985"
-      ]
+      "must_cite": ["985"]
     },
     {
       "id": "tema-inexistente",
       "query": "Qual a tese firmada no Tema 9999 do STJ?",
       "gold": [],
-      "must_not": [
-        "a tese firmada é",
-        "a tese fixada é",
-        "o STJ fixou a tese"
-      ],
+      "must_not": ["a tese firmada é", "a tese fixada é", "o STJ fixou a tese"],
       "expect_refusal": true,
       "refusal_words": [
         "não .{0,40}(encontr|exist|localiz|confirm|retorn|cont[eé]m|disponív)",

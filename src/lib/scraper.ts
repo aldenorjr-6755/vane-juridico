@@ -16,7 +16,11 @@ export type ScrapeLink = { href: string; text: string };
  * for the `/api/scrape` route, where a caller collecting a journal archive
  * needs the issue and article URLs, not just the page text.
  */
-export type ScrapeResult = { content: string; title: string; links?: ScrapeLink[] };
+export type ScrapeResult = {
+  content: string;
+  title: string;
+  links?: ScrapeLink[];
+};
 
 const MAX_LINKS = 400;
 
@@ -247,7 +251,10 @@ class Scraper {
 
     const title = text.split('\n').find((l) => l.trim().length > 0) ?? url;
 
-    return { title: title.trim().slice(0, 120), content: `# ${url}\n\n${text}` };
+    return {
+      title: title.trim().slice(0, 120),
+      content: `# ${url}\n\n${text}`,
+    };
   }
 
   /**
@@ -296,7 +303,9 @@ class Scraper {
    * into orgao / tipo / numero - enough to ask the official API for that exact
    * record instead of scraping nothing.
    */
-  private static async scrapeBnp(url: string): Promise<ScrapeResult | undefined> {
+  private static async scrapeBnp(
+    url: string,
+  ): Promise<ScrapeResult | undefined> {
     const id = (url.split('#')[1] ?? '').trim();
     const parts = id.split('-');
 
@@ -306,32 +315,35 @@ class Scraper {
     const tipo = parts[parts.length - 2].toUpperCase();
     const orgao = parts.slice(0, -2).join('-').toUpperCase();
 
-    const res = await fetch('https://pangeabnp.pdpj.jus.br/api/v1/precedentes', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'User-Agent': BROWSER_UA,
-      },
-      body: JSON.stringify({
-        filtro: {
-          buscaGeral: '',
-          todasPalavras: '',
-          quaisquerPalavras: '',
-          semPalavras: '',
-          trechoExato: '',
-          atualizacaoDesde: '',
-          atualizacaoAte: '',
-          cancelados: false,
-          ordenacao: 'Text',
-          nr: numero,
-          pagina: 1,
-          tamanhoPagina: 20,
-          orgaos: [orgao],
-          tipos: [tipo],
+    const res = await fetch(
+      'https://pangeabnp.pdpj.jus.br/api/v1/precedentes',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': BROWSER_UA,
         },
-      }),
-      signal: AbortSignal.timeout(25000),
-    });
+        body: JSON.stringify({
+          filtro: {
+            buscaGeral: '',
+            todasPalavras: '',
+            quaisquerPalavras: '',
+            semPalavras: '',
+            trechoExato: '',
+            atualizacaoDesde: '',
+            atualizacaoAte: '',
+            cancelados: false,
+            ordenacao: 'Text',
+            nr: numero,
+            pagina: 1,
+            tamanhoPagina: 20,
+            orgaos: [orgao],
+            tipos: [tipo],
+          },
+        }),
+        signal: AbortSignal.timeout(25000),
+      },
+    );
 
     if (!res.ok) return undefined;
 
