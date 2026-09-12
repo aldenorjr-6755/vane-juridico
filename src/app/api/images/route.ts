@@ -34,7 +34,7 @@ export const POST = async (req: Request) => {
   } catch (err) {
     console.error(`An error occurred while searching images: ${err}`);
     return Response.json(
-      { message: 'An error occurred while searching images' },
+      { message: 'Ocorreu um erro ao buscar imagens' },
       { status: 500 },
     );
   }

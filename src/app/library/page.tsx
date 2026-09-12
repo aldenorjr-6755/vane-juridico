@@ -49,10 +49,10 @@ const Page = () => {
                 className="text-5xl font-normal p-2 pb-0"
                 style={{ fontFamily: 'PP Editorial, serif' }}
               >
-                Library
+                Biblioteca
               </h1>
               <div className="px-2 text-sm text-black/60 dark:text-white/60 text-center lg:text-left">
-                Past chats, sources, and uploads.
+                Conversas, fontes e arquivos enviados anteriormente.
               </div>
             </div>
           </div>
@@ -61,8 +61,8 @@ const Page = () => {
             <span className="inline-flex items-center gap-1 rounded-full border border-black/20 dark:border-white/20 px-2 py-0.5">
               <BookOpenText size={14} />
               {loading
-                ? 'Loading…'
-                : `${chats.length} ${chats.length === 1 ? 'chat' : 'chats'}`}
+                ? 'Carregando…'
+                : `${chats.length} ${chats.length === 1 ? 'conversa' : 'conversas'}`}
             </span>
           </div>
         </div>
@@ -93,13 +93,13 @@ const Page = () => {
             <BookOpenText className="text-black/70 dark:text-white/70" />
           </div>
           <p className="mt-2 text-black/70 dark:text-white/70 text-sm">
-            No chats found.
+            Nenhuma conversa encontrada.
           </p>
           <p className="mt-1 text-black/70 dark:text-white/70 text-sm">
             <Link href="/" className="text-sky-400">
-              Start a new chat
+              Inicie uma nova conversa
             </Link>{' '}
-            to see it listed here.
+            para vê-la listada aqui.
           </p>
         </div>
       ) : (
@@ -148,7 +148,7 @@ const Page = () => {
                   <div className="flex flex-wrap items-center gap-2 text-black/70 dark:text-white/70">
                     <span className="inline-flex items-center gap-1 text-xs">
                       <ClockIcon size={14} />
-                      {formatTimeDifference(new Date(), chat.createdAt)} Ago
+                      {formatTimeDifference(new Date(), chat.createdAt)} atrás
                     </span>
 
                     {sourcesLabel && (
@@ -161,7 +161,7 @@ const Page = () => {
                       <span className="inline-flex items-center gap-1 text-xs border border-black/20 dark:border-white/20 rounded-full px-2 py-0.5">
                         <FileText size={14} />
                         {chat.files.length}{' '}
-                        {chat.files.length === 1 ? 'file' : 'files'}
+                        {chat.files.length === 1 ? 'arquivo' : 'arquivos'}
                       </span>
                     )}
                   </div>

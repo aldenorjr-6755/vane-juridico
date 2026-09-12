@@ -61,7 +61,7 @@ const SettingsSelect = ({
       }
     } catch (error) {
       console.error('Error saving config:', error);
-      toast.error('Failed to save configuration.');
+      toast.error('Falha ao salvar configuração.');
     } finally {
       setTimeout(() => setLoading(false), 150);
     }
@@ -133,7 +133,7 @@ const SettingsInput = ({
       }
     } catch (error) {
       console.error('Error saving config:', error);
-      toast.error('Failed to save configuration.');
+      toast.error('Falha ao salvar configuração.');
     } finally {
       setTimeout(() => setLoading(false), 150);
     }
@@ -210,7 +210,7 @@ const SettingsTextarea = ({
       }
     } catch (error) {
       console.error('Error saving config:', error);
-      toast.error('Failed to save configuration.');
+      toast.error('Falha ao salvar configuração.');
     } finally {
       setTimeout(() => setLoading(false), 150);
     }
@@ -287,7 +287,7 @@ const SettingsSwitch = ({
       }
     } catch (error) {
       console.error('Error saving config:', error);
-      toast.error('Failed to save configuration.');
+      toast.error('Falha ao salvar configuração.');
     } finally {
       setTimeout(() => setLoading(false), 150);
     }
@@ -371,7 +371,7 @@ const SettingsField = ({
         />
       );
     default:
-      return <div>Unsupported field type: {field.type}</div>;
+      return <div>Tipo de campo não suportado: {field.type}</div>;
   }
 };
 

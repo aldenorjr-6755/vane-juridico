@@ -20,23 +20,23 @@ const topics: { key: string; display: string }[] = [
     key: 'juridico',
   },
   {
-    display: 'Tech & Science',
+    display: 'Tecnologia e Ciência',
     key: 'tech',
   },
   {
-    display: 'Finance',
+    display: 'Finanças',
     key: 'finance',
   },
   {
-    display: 'Art & Culture',
+    display: 'Arte e Cultura',
     key: 'art',
   },
   {
-    display: 'Sports',
+    display: 'Esportes',
     key: 'sports',
   },
   {
-    display: 'Entertainment',
+    display: 'Entretenimento',
     key: 'entertainment',
   },
 ];
@@ -67,7 +67,7 @@ const Page = () => {
       setDiscover(data.blogs);
     } catch (err: any) {
       console.error('Error fetching data:', err.message);
-      toast.error('Error fetching data');
+      toast.error('Erro ao buscar dados');
     } finally {
       setLoading(false);
     }
@@ -88,7 +88,7 @@ const Page = () => {
                 className="text-5xl font-normal p-2"
                 style={{ fontFamily: 'PP Editorial, serif' }}
               >
-                Discover
+                Descobrir
               </h1>
             </div>
             <div className="flex flex-row items-center space-x-2 overflow-x-auto">

@@ -14,27 +14,32 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 const messageSchema = z.object({
-  messageId: z.string().min(1, 'Message ID is required'),
-  chatId: z.string().min(1, 'Chat ID is required'),
-  content: z.string().min(1, 'Message content is required'),
+  messageId: z.string().min(1, 'O ID da mensagem é obrigatório'),
+  chatId: z.string().min(1, 'O ID do chat é obrigatório'),
+  content: z.string().min(1, 'O conteúdo da mensagem é obrigatório'),
 });
 
 const chatModelSchema: z.ZodType<ModelWithProvider> = z.object({
-  providerId: z.string({ message: 'Chat model provider id must be provided' }),
-  key: z.string({ message: 'Chat model key must be provided' }),
+  providerId: z.string({
+    message: 'O ID do provedor do modelo de chat deve ser informado',
+  }),
+  key: z.string({ message: 'A chave do modelo de chat deve ser informada' }),
 });
 
 const embeddingModelSchema: z.ZodType<ModelWithProvider> = z.object({
   providerId: z.string({
-    message: 'Embedding model provider id must be provided',
+    message: 'O ID do provedor do modelo de embedding deve ser informado',
   }),
-  key: z.string({ message: 'Embedding model key must be provided' }),
+  key: z.string({
+    message: 'A chave do modelo de embedding deve ser informada',
+  }),
 });
 
 const bodySchema = z.object({
   message: messageSchema,
   optimizationMode: z.enum(['speed', 'balanced', 'quality'], {
-    message: 'Optimization mode must be one of: speed, balanced, quality',
+    message:
+      'O modo de otimização deve ser um dos seguintes: speed, balanced, quality',
   }),
   sources: z.array(z.string()).optional().default([]),
   history: z
@@ -90,7 +95,7 @@ const ensureChatExists = async (input: {
         files: input.fileIds.map((id) => {
           return {
             fileId: id,
-            name: UploadManager.getFile(id)?.name || 'Uploaded File',
+            name: UploadManager.getFile(id)?.name || 'Arquivo Enviado',
           };
         }),
       });
@@ -108,7 +113,7 @@ export const POST = async (req: Request) => {
 
     if (!parseBody.success) {
       return Response.json(
-        { message: 'Invalid request body', error: parseBody.error },
+        { message: 'Corpo da requisição inválido', error: parseBody.error },
         { status: 400 },
       );
     }
@@ -119,7 +124,7 @@ export const POST = async (req: Request) => {
     if (message.content === '') {
       return Response.json(
         {
-          message: 'Please provide a message to process',
+          message: 'Forneça uma mensagem para processar',
         },
         { status: 400 },
       );
@@ -247,7 +252,7 @@ export const POST = async (req: Request) => {
   } catch (err) {
     console.error('An error occurred while processing chat request:', err);
     return Response.json(
-      { message: 'An error occurred while processing chat request' },
+      { message: 'Ocorreu um erro ao processar a requisição do chat' },
       { status: 500 },
     );
   }

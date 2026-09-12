@@ -12,7 +12,7 @@ export async function POST(req: Request) {
 
     if (!embeddingModel || !embeddingModelProvider) {
       return NextResponse.json(
-        { message: 'Missing embedding model or provider' },
+        { message: 'Modelo de embedding ou provedor ausente' },
         { status: 400 },
       );
     }
@@ -33,7 +33,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error('Error uploading file:', error);
     return NextResponse.json(
-      { message: 'An error has occurred.' },
+      { message: 'Ocorreu um erro.' },
       { status: 500 },
     );
   }

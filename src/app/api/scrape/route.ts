@@ -43,7 +43,10 @@ const clampChars = (raw: unknown): number => {
   return Math.min(Math.floor(n), HARD_MAX_CHARS);
 };
 
-const scrapeOne = async (url: string, maxChars: number): Promise<ScrapeItem> => {
+const scrapeOne = async (
+  url: string,
+  maxChars: number,
+): Promise<ScrapeItem> => {
   if (!isHttpUrl(url)) {
     return {
       url,
@@ -78,7 +81,12 @@ const scrapeOne = async (url: string, maxChars: number): Promise<ScrapeItem> => 
       chars: content.length,
       truncated: content.length > maxChars,
       ...(result.links ? { links: result.links } : {}),
-      ...(failed ? { error: 'o scraper nao conseguiu ler a pagina (ver log do container)' } : {}),
+      ...(failed
+        ? {
+            error:
+              'o scraper nao conseguiu ler a pagina (ver log do container)',
+          }
+        : {}),
     };
   } catch (err) {
     return {
@@ -95,19 +103,25 @@ const scrapeOne = async (url: string, maxChars: number): Promise<ScrapeItem> => 
 };
 
 const run = async (urls: string[], maxChars: number) => {
-  const unique = Array.from(new Set(urls.map((u) => String(u).trim()).filter(Boolean)));
+  const unique = Array.from(
+    new Set(urls.map((u) => String(u).trim()).filter(Boolean)),
+  );
 
   if (unique.length === 0) {
-    return Response.json({ message: 'Missing url(s)' }, { status: 400 });
+    return Response.json({ message: 'URL(s) ausente(s)' }, { status: 400 });
   }
 
   const selected = unique.slice(0, MAX_URLS);
-  const results = await Promise.all(selected.map((u) => scrapeOne(u, maxChars)));
+  const results = await Promise.all(
+    selected.map((u) => scrapeOne(u, maxChars)),
+  );
 
   return Response.json({
     results,
     ...(unique.length > MAX_URLS
-      ? { warning: `so as ${MAX_URLS} primeiras URLs foram lidas (${unique.length} recebidas)` }
+      ? {
+          warning: `so as ${MAX_URLS} primeiras URLs foram lidas (${unique.length} recebidas)`,
+        }
       : {}),
   });
 };
@@ -124,7 +138,7 @@ export const POST = async (req: Request) => {
     return await run(urls, clampChars(body?.maxChars));
   } catch (err) {
     console.error('Error in scrape route:', err);
-    return Response.json({ message: 'An error has occurred.' }, { status: 500 });
+    return Response.json({ message: 'Ocorreu um erro.' }, { status: 500 });
   }
 };
 
@@ -136,6 +150,6 @@ export const GET = async (req: Request) => {
     return await run(urls, clampChars(searchParams.get('maxChars')));
   } catch (err) {
     console.error('Error in scrape route:', err);
-    return Response.json({ message: 'An error has occurred.' }, { status: 500 });
+    return Response.json({ message: 'Ocorreu um erro.' }, { status: 500 });
   }
 };

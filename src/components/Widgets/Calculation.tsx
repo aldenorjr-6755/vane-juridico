@@ -15,7 +15,7 @@ const Calculation = ({ expression, result }: CalculationWidgetProps) => {
           <div className="flex items-center gap-2 text-black/60 dark:text-white/70">
             <Calculator className="w-4 h-4" />
             <span className="text-xs uppercase font-semibold tracking-wide">
-              Expression
+              Expressão
             </span>
           </div>
           <div className="rounded-lg border border-light-200 dark:border-dark-200 bg-light-secondary dark:bg-dark-secondary p-3">
@@ -29,7 +29,7 @@ const Calculation = ({ expression, result }: CalculationWidgetProps) => {
           <div className="flex items-center gap-2 text-black/60 dark:text-white/70">
             <Equal className="w-4 h-4" />
             <span className="text-xs uppercase font-semibold tracking-wide">
-              Result
+              Resultado
             </span>
           </div>
           <div className="rounded-xl border border-light-200 dark:border-dark-200 bg-light-secondary dark:bg-dark-secondary p-5">

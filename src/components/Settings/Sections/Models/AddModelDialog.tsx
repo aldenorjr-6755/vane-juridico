@@ -59,13 +59,13 @@ const AddModel = ({
         }),
       );
 
-      toast.success('Model added successfully.');
+      toast.success('Modelo adicionado com sucesso.');
       setModelName('');
       setModelKey('');
       setOpen(false);
     } catch (error) {
       console.error('Error adding model:', error);
-      toast.error('Failed to add model.');
+      toast.error('Falha ao adicionar modelo.');
     } finally {
       setLoading(false);
     }
@@ -78,7 +78,7 @@ const AddModel = ({
         className="text-xs text-black/70 dark:text-white/70 hover:text-black hover:dark:text-white flex flex-row items-center space-x-1 active:scale-95 transition duration-200"
       >
         <Plus size={12} />
-        <span>Add</span>
+        <span>Adicionar</span>
       </button>
       <AnimatePresence>
         {open && (
@@ -98,7 +98,8 @@ const AddModel = ({
               <DialogPanel className="w-full mx-4 lg:w-[600px] max-h-[85vh] flex flex-col border bg-light-primary dark:bg-dark-primary border-light-secondary dark:border-dark-secondary rounded-lg">
                 <div className="px-6 pt-6 pb-4">
                   <h3 className="text-black/90 dark:text-white/90 font-medium text-sm">
-                    Add new {type === 'chat' ? 'chat' : 'embedding'} model
+                    Adicionar novo modelo de{' '}
+                    {type === 'chat' ? 'chat' : 'embedding'}
                   </h3>
                 </div>
                 <div className="border-t border-light-200 dark:border-dark-200" />
@@ -110,26 +111,26 @@ const AddModel = ({
                     <div className="flex flex-col space-y-4 flex-1">
                       <div className="flex flex-col items-start space-y-2">
                         <label className="text-xs text-black/70 dark:text-white/70">
-                          Model name*
+                          Nome do modelo*
                         </label>
                         <input
                           value={modelName}
                           onChange={(e) => setModelName(e.target.value)}
                           className="w-full rounded-lg border border-light-200 dark:border-dark-200 bg-light-primary dark:bg-dark-primary px-4 py-3 text-[13px] text-black/80 dark:text-white/80 placeholder:text-black/40 dark:placeholder:text-white/40 focus-visible:outline-none focus-visible:border-light-300 dark:focus-visible:border-dark-300 transition-colors disabled:cursor-not-allowed disabled:opacity-60"
-                          placeholder="e.g., GPT-4"
+                          placeholder="ex.: GPT-4"
                           type="text"
                           required
                         />
                       </div>
                       <div className="flex flex-col items-start space-y-2">
                         <label className="text-xs text-black/70 dark:text-white/70">
-                          Model key*
+                          Chave do modelo*
                         </label>
                         <input
                           value={modelKey}
                           onChange={(e) => setModelKey(e.target.value)}
                           className="w-full rounded-lg border border-light-200 dark:border-dark-200 bg-light-primary dark:bg-dark-primary px-4 py-3 text-[13px] text-black/80 dark:text-white/80 placeholder:text-black/40 dark:placeholder:text-white/40 focus-visible:outline-none focus-visible:border-light-300 dark:focus-visible:border-dark-300 transition-colors disabled:cursor-not-allowed disabled:opacity-60"
-                          placeholder="e.g., gpt-4"
+                          placeholder="ex.: gpt-4"
                           type="text"
                           required
                         />
@@ -145,7 +146,7 @@ const AddModel = ({
                         {loading ? (
                           <Loader2 className="animate-spin" size={16} />
                         ) : (
-                          'Add Model'
+                          'Adicionar Modelo'
                         )}
                       </button>
                     </div>

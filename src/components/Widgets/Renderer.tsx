@@ -68,7 +68,11 @@ const Renderer = ({ widgets }: { widgets: Widget[] }) => {
           />
         );
       default:
-        return <div key={index}>Unknown widget type: {widget.widgetType}</div>;
+        return (
+          <div key={index}>
+            Tipo de widget desconhecido: {widget.widgetType}
+          </div>
+        );
     }
   });
 };

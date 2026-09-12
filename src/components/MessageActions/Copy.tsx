@@ -22,12 +22,12 @@ const Copy = ({
 
         const contentToCopy = `${initialMessage}${
           sources.length > 0
-            ? `\n\nCitations:\n${sources
+            ? `\n\nCitações:\n${sources
                 .map((source) => source.data)
                 .flat()
                 .map(
                   (s, i) =>
-                    `[${i + 1}] ${s.metadata.url.startsWith('file_id://') ? s.metadata.fileName || 'Uploaded File' : s.metadata.url}`,
+                    `[${i + 1}] ${s.metadata.url.startsWith('file_id://') ? s.metadata.fileName || 'Arquivo enviado' : s.metadata.url}`,
                 )
                 .join(`\n`)}`
             : ''

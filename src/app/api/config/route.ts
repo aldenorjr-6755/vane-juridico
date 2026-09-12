@@ -35,10 +35,7 @@ export const GET = async (req: NextRequest) => {
     });
   } catch (err) {
     console.error('Error in getting config: ', err);
-    return Response.json(
-      { message: 'An error has occurred.' },
-      { status: 500 },
-    );
+    return Response.json({ message: 'Ocorreu um erro.' }, { status: 500 });
   }
 };
 
@@ -49,7 +46,7 @@ export const POST = async (req: NextRequest) => {
     if (!body.key || !body.value) {
       return Response.json(
         {
-          message: 'Key and value are required.',
+          message: 'Chave e valor são obrigatórios.',
         },
         {
           status: 400,
@@ -61,7 +58,7 @@ export const POST = async (req: NextRequest) => {
 
     return Response.json(
       {
-        message: 'Config updated successfully.',
+        message: 'Configuração atualizada com sucesso.',
       },
       {
         status: 200,
@@ -69,9 +66,6 @@ export const POST = async (req: NextRequest) => {
     );
   } catch (err) {
     console.error('Error in getting config: ', err);
-    return Response.json(
-      { message: 'An error has occurred.' },
-      { status: 500 },
-    );
+    return Response.json({ message: 'Ocorreu um erro.' }, { status: 500 });
   }
 };

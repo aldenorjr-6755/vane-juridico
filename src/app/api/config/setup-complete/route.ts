@@ -7,7 +7,7 @@ export const POST = async (req: NextRequest) => {
 
     return Response.json(
       {
-        message: 'Setup marked as complete.',
+        message: 'Configuração marcada como concluída.',
       },
       {
         status: 200,
@@ -15,9 +15,6 @@ export const POST = async (req: NextRequest) => {
     );
   } catch (err) {
     console.error('Error marking setup as complete: ', err);
-    return Response.json(
-      { message: 'An error has occurred.' },
-      { status: 500 },
-    );
+    return Response.json({ message: 'Ocorreu um erro.' }, { status: 500 });
   }
 };

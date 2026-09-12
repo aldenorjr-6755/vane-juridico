@@ -46,7 +46,7 @@ const SetupWizard = ({
                 animate={{ opacity: 1, translateY: '0px' }}
                 className="text-4xl md:text-6xl xl:text-8xl font-normal font-['Instrument_Serif'] tracking-tight"
               >
-                Welcome to
+                Bem-vindo ao
                 <span className="text-[#24A0ED] italic font-['PP_Editorial']">
                   Vane
                 </span>
@@ -57,9 +57,9 @@ const SetupWizard = ({
                 animate={{ opacity: 1 }}
                 className="text-black/70 dark:text-white/70 text-sm md:text-lg xl:text-2xl mt-2"
               >
-                <span className="font-light">Web search,</span>{' '}
+                <span className="font-light">Busca na web,</span>{' '}
                 <span className="font-light font-['PP_Editorial'] italic">
-                  reimagined
+                  reimaginada
                 </span>
               </motion.p>
             </motion.div>
@@ -91,11 +91,11 @@ const SetupWizard = ({
                   }}
                   className="text-2xl md:text-4xl xl:text-6xl font-normal font-['Instrument_Serif'] tracking-tight"
                 >
-                  Let us get
+                  Vamos deixar
                   <span className="text-[#24A0ED] italic font-['PP_Editorial']">
                     Vane
                   </span>{' '}
-                  set up for you
+                  pronto para você
                 </motion.p>
               )}
               {setupState > 1 && (

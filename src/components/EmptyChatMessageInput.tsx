@@ -62,7 +62,7 @@ const EmptyChatMessageInput = () => {
           onChange={(e) => setMessage(e.target.value)}
           minRows={2}
           className="px-2 bg-transparent placeholder:text-[15px] placeholder:text-black/50 dark:placeholder:text-white/50 text-sm text-black dark:text-white resize-none focus:outline-none w-full max-h-24 lg:max-h-36 xl:max-h-48"
-          placeholder="Ask anything..."
+          placeholder="Pergunte qualquer coisa..."
         />
         <div className="flex flex-row items-center justify-between mt-4">
           <Optimization />

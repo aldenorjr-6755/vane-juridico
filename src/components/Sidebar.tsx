@@ -35,19 +35,19 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
       icon: Home,
       href: '/',
       active: segments.length === 0 || segments.includes('c'),
-      label: 'Home',
+      label: 'Início',
     },
     {
       icon: Search,
       href: '/discover',
       active: segments.includes('discover'),
-      label: 'Discover',
+      label: 'Descobrir',
     },
     {
       icon: BookOpenText,
       href: '/library',
       active: segments.includes('library'),
-      label: 'Library',
+      label: 'Biblioteca',
     },
   ];
 

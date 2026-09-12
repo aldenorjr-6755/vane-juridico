@@ -23,7 +23,7 @@ export const GET = async (req: Request) => {
     console.error('An error occurred while fetching providers', err);
     return Response.json(
       {
-        message: 'An error has occurred.',
+        message: 'Ocorreu um erro.',
       },
       {
         status: 500,
@@ -40,7 +40,7 @@ export const POST = async (req: NextRequest) => {
     if (!type || !name || !config) {
       return Response.json(
         {
-          message: 'Missing required fields.',
+          message: 'Campos obrigatórios ausentes.',
         },
         {
           status: 400,
@@ -64,7 +64,7 @@ export const POST = async (req: NextRequest) => {
     console.error('An error occurred while creating provider', err);
     return Response.json(
       {
-        message: 'An error has occurred.',
+        message: 'Ocorreu um erro.',
       },
       {
         status: 500,

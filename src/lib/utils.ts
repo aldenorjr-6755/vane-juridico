@@ -15,13 +15,13 @@ export const formatTimeDifference = (
   );
 
   if (diffInSeconds < 60)
-    return `${diffInSeconds} second${diffInSeconds !== 1 ? 's' : ''}`;
+    return `${diffInSeconds} segundo${diffInSeconds !== 1 ? 's' : ''}`;
   else if (diffInSeconds < 3600)
-    return `${Math.floor(diffInSeconds / 60)} minute${Math.floor(diffInSeconds / 60) !== 1 ? 's' : ''}`;
+    return `${Math.floor(diffInSeconds / 60)} minuto${Math.floor(diffInSeconds / 60) !== 1 ? 's' : ''}`;
   else if (diffInSeconds < 86400)
-    return `${Math.floor(diffInSeconds / 3600)} hour${Math.floor(diffInSeconds / 3600) !== 1 ? 's' : ''}`;
+    return `${Math.floor(diffInSeconds / 3600)} hora${Math.floor(diffInSeconds / 3600) !== 1 ? 's' : ''}`;
   else if (diffInSeconds < 31536000)
-    return `${Math.floor(diffInSeconds / 86400)} day${Math.floor(diffInSeconds / 86400) !== 1 ? 's' : ''}`;
+    return `${Math.floor(diffInSeconds / 86400)} dia${Math.floor(diffInSeconds / 86400) !== 1 ? 's' : ''}`;
   else
-    return `${Math.floor(diffInSeconds / 31536000)} year${Math.floor(diffInSeconds / 31536000) !== 1 ? 's' : ''}`;
+    return `${Math.floor(diffInSeconds / 31536000)} ano${Math.floor(diffInSeconds / 31536000) !== 1 ? 's' : ''}`;
 };

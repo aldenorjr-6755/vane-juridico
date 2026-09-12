@@ -146,9 +146,9 @@ const WeatherWidget = () => {
               {data.condition}
             </span>
             <div className="flex flex-row justify-between w-full mt-auto pt-2 border-t border-light-200/50 dark:border-dark-200/50 text-xs text-black/50 dark:text-white/50 font-medium">
-              <span>Humidity {data.humidity}%</span>
+              <span>Umidade {data.humidity}%</span>
               <span className="font-semibold text-black/70 dark:text-white/70">
-                Now
+                Agora
               </span>
             </div>
           </div>

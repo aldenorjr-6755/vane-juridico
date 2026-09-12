@@ -11,7 +11,7 @@ export const DELETE = async (
     if (!id) {
       return Response.json(
         {
-          message: 'Provider ID is required.',
+          message: 'O ID do provedor é obrigatório.',
         },
         {
           status: 400,
@@ -24,7 +24,7 @@ export const DELETE = async (
 
     return Response.json(
       {
-        message: 'Provider deleted successfully.',
+        message: 'Provedor excluído com sucesso.',
       },
       {
         status: 200,
@@ -34,7 +34,7 @@ export const DELETE = async (
     console.error('An error occurred while deleting provider', err.message);
     return Response.json(
       {
-        message: 'An error has occurred.',
+        message: 'Ocorreu um erro.',
       },
       {
         status: 500,
@@ -55,7 +55,7 @@ export const PATCH = async (
     if (!id || !name || !config) {
       return Response.json(
         {
-          message: 'Missing required fields.',
+          message: 'Campos obrigatórios ausentes.',
         },
         {
           status: 400,
@@ -79,7 +79,7 @@ export const PATCH = async (
     console.error('An error occurred while updating provider', err.message);
     return Response.json(
       {
-        message: 'An error has occurred.',
+        message: 'Ocorreu um erro.',
       },
       {
         status: 500,

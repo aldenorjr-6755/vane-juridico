@@ -37,10 +37,12 @@ const NewsArticleWidget = () => {
           </div>
         </div>
       ) : error ? (
-        <div className="w-full text-xs text-red-400">Could not load news.</div>
+        <div className="w-full text-xs text-red-400">
+          Não foi possível carregar as notícias.
+        </div>
       ) : article ? (
         <a
-          href={`/?q=Summary: ${article.url}`}
+          href={`/?q=Resumo: ${article.url}`}
           className="flex flex-row items-stretch w-full h-full relative overflow-hidden group"
         >
           <div className="relative w-24 min-w-24 max-w-24 h-full overflow-hidden">

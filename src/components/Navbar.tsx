@@ -31,19 +31,19 @@ const exportAsMarkdown = (sections: Section[], title: string) => {
   const date = new Date(
     sections[0].message.createdAt || Date.now(),
   ).toLocaleString();
-  let md = `# 💬 Chat Export: ${title}\n\n`;
-  md += `*Exported on: ${date}*\n\n---\n`;
+  let md = `# 💬 Exportação da Conversa: ${title}\n\n`;
+  md += `*Exportado em: ${date}*\n\n---\n`;
 
   sections.forEach((section, idx) => {
     md += `\n---\n`;
-    md += `**🧑 User**  
+    md += `**🧑 Usuário**
 `;
     md += `*${new Date(section.message.createdAt).toLocaleString()}*\n\n`;
     md += `> ${section.message.query.replace(/\n/g, '\n> ')}\n`;
 
     if (section.message.responseBlocks.length > 0) {
       md += `\n---\n`;
-      md += `**🤖 Assistant**  
+      md += `**🤖 Assistente**
 `;
       md += `*${new Date(section.message.createdAt).toLocaleString()}*\n\n`;
       md += `> ${section.message.responseBlocks
@@ -62,7 +62,7 @@ const exportAsMarkdown = (sections: Section[], title: string) => {
       sourceResponseBlock.data &&
       sourceResponseBlock.data.length > 0
     ) {
-      md += `\n**Citations:**\n`;
+      md += `\n**Citações:**\n`;
       sourceResponseBlock.data.forEach((src: any, i: number) => {
         const url = src.metadata?.url || '';
         md += `- [${i + 1}] [${url}](${url})\n`;
@@ -70,7 +70,7 @@ const exportAsMarkdown = (sections: Section[], title: string) => {
     }
   });
   md += '\n---\n';
-  downloadFile(`${title || 'chat'}.md`, md, 'text/markdown');
+  downloadFile(`${title || 'conversa'}.md`, md, 'text/markdown');
 };
 
 const exportAsPDF = (sections: Section[], title: string) => {
@@ -81,11 +81,11 @@ const exportAsPDF = (sections: Section[], title: string) => {
   let y = 15;
   const pageHeight = doc.internal.pageSize.height;
   doc.setFontSize(18);
-  doc.text(`Chat Export: ${title}`, 10, y);
+  doc.text(`Exportação da Conversa: ${title}`, 10, y);
   y += 8;
   doc.setFontSize(11);
   doc.setTextColor(100);
-  doc.text(`Exported on: ${date}`, 10, y);
+  doc.text(`Exportado em: ${date}`, 10, y);
   y += 8;
   doc.setDrawColor(200);
   doc.line(10, y, 200, y);
@@ -98,7 +98,7 @@ const exportAsPDF = (sections: Section[], title: string) => {
       y = 15;
     }
     doc.setFont('helvetica', 'bold');
-    doc.text('User', 10, y);
+    doc.text('Usuário', 10, y);
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(10);
     doc.setTextColor(120);
@@ -130,7 +130,7 @@ const exportAsPDF = (sections: Section[], title: string) => {
         y = 15;
       }
       doc.setFont('helvetica', 'bold');
-      doc.text('Assistant', 10, y);
+      doc.text('Assistente', 10, y);
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(10);
       doc.setTextColor(120);
@@ -170,7 +170,7 @@ const exportAsPDF = (sections: Section[], title: string) => {
           doc.addPage();
           y = 15;
         }
-        doc.text('Citations:', 12, y);
+        doc.text('Citações:', 12, y);
         y += 5;
         sourceResponseBlock.data.forEach((src: any, i: number) => {
           const url = src.metadata?.url || '';
@@ -193,7 +193,7 @@ const exportAsPDF = (sections: Section[], title: string) => {
       y += 4;
     }
   });
-  doc.save(`${title || 'chat'}.pdf`);
+  doc.save(`${title || 'conversa'}.pdf`);
 };
 
 const Navbar = () => {
@@ -207,7 +207,7 @@ const Navbar = () => {
       const newTitle =
         sections[0].message.query.length > 30
           ? `${sections[0].message.query.substring(0, 30).trim()}...`
-          : sections[0].message.query || 'New Conversation';
+          : sections[0].message.query || 'Nova conversa';
 
       setTitle(newTitle);
       const newTimeAgo = formatTimeDifference(
@@ -246,13 +246,13 @@ const Navbar = () => {
             </a>
             <div className="hidden lg:flex items-center gap-2 text-black/50 dark:text-white/50 min-w-0">
               <Clock size={14} />
-              <span className="text-xs whitespace-nowrap">{timeAgo} ago</span>
+              <span className="text-xs whitespace-nowrap">{timeAgo} atrás</span>
             </div>
           </div>
 
           <div className="flex-1 mx-4 min-w-0">
             <h1 className="text-center text-sm font-medium text-black/80 dark:text-white/90 truncate">
-              {title || 'New Conversation'}
+              {title || 'Nova conversa'}
             </h1>
           </div>
 
@@ -274,7 +274,7 @@ const Navbar = () => {
                   <div className="p-3">
                     <div className="mb-2">
                       <p className="text-xs font-medium text-black/40 dark:text-white/40 uppercase tracking-wide">
-                        Export Chat
+                        Exportar conversa
                       </p>
                     </div>
                     <div className="space-y-1">
@@ -288,7 +288,7 @@ const Navbar = () => {
                             Markdown
                           </p>
                           <p className="text-xs text-black/50 dark:text-white/50">
-                            .md format
+                            formato .md
                           </p>
                         </div>
                       </button>
@@ -302,7 +302,7 @@ const Navbar = () => {
                             PDF
                           </p>
                           <p className="text-xs text-black/50 dark:text-white/50">
-                            Document format
+                            Formato de documento
                           </p>
                         </div>
                       </button>

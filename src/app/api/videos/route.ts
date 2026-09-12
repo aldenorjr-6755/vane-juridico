@@ -34,7 +34,7 @@ export const POST = async (req: Request) => {
   } catch (err) {
     console.error(`An error occurred while searching videos: ${err}`);
     return Response.json(
-      { message: 'An error occurred while searching videos' },
+      { message: 'Ocorreu um erro ao buscar vídeos' },
       { status: 500 },
     );
   }

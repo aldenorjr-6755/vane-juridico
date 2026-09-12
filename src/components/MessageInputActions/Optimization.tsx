@@ -13,20 +13,21 @@ import { AnimatePresence, motion } from 'motion/react';
 const OptimizationModes = [
   {
     key: 'speed',
-    title: 'Speed',
-    description: 'Prioritize speed and get the quickest possible answer.',
+    title: 'Velocidade',
+    description:
+      'Priorize a velocidade e obtenha a resposta mais rápida possível.',
     icon: <Zap size={16} className="text-[#FF9800]" />,
   },
   {
     key: 'balanced',
-    title: 'Balanced',
-    description: 'Find the right balance between speed and accuracy',
+    title: 'Balanceado',
+    description: 'Encontre o equilíbrio certo entre velocidade e precisão',
     icon: <Sliders size={16} className="text-[#4CAF50]" />,
   },
   {
     key: 'quality',
-    title: 'Quality',
-    description: 'Get the most thorough and accurate answer',
+    title: 'Qualidade',
+    description: 'Obtenha a resposta mais completa e precisa',
     icon: (
       <Star
         size={16}

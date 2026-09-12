@@ -22,32 +22,32 @@ import Personalization from './Sections/Personalization';
 const sections = [
   {
     key: 'preferences',
-    name: 'Preferences',
-    description: 'Customize your application preferences.',
+    name: 'Preferências',
+    description: 'Personalize as preferências do aplicativo.',
     icon: Sliders,
     component: Preferences,
     dataAdd: 'preferences',
   },
   {
     key: 'personalization',
-    name: 'Personalization',
-    description: 'Customize the behavior and tone of the model.',
+    name: 'Personalização',
+    description: 'Personalize o comportamento e o tom do modelo.',
     icon: ToggleRight,
     component: Personalization,
     dataAdd: 'personalization',
   },
   {
     key: 'models',
-    name: 'Models',
-    description: 'Connect to AI services and manage connections.',
+    name: 'Modelos',
+    description: 'Conecte-se a serviços de IA e gerencie conexões.',
     icon: BrainCog,
     component: Models,
     dataAdd: 'modelProviders',
   },
   {
     key: 'search',
-    name: 'Search',
-    description: 'Manage search settings.',
+    name: 'Busca',
+    description: 'Gerencie as configurações de busca.',
     icon: Search,
     component: SearchSection,
     dataAdd: 'search',
@@ -86,7 +86,7 @@ const SettingsDialogue = ({
           setConfig(data);
         } catch (error) {
           console.error('Error fetching config:', error);
-          toast.error('Failed to load configuration.');
+          toast.error('Falha ao carregar configuração.');
         } finally {
           setIsLoading(false);
         }
@@ -127,7 +127,7 @@ const SettingsDialogue = ({
                       className="text-black/50 dark:text-white/50 group-hover:text-black/70 group-hover:dark:text-white/70"
                     />
                     <p className="text-black/50 dark:text-white/50 group-hover:text-black/70 group-hover:dark:text-white/70 text-[14px]">
-                      Back
+                      Voltar
                     </p>
                   </button>
 
@@ -151,7 +151,7 @@ const SettingsDialogue = ({
                 </div>
                 <div className="flex flex-col space-y-1 py-[18px] px-2">
                   <p className="text-xs text-black/70 dark:text-white/70">
-                    Version: {process.env.NEXT_PUBLIC_VERSION}
+                    Versão: {process.env.NEXT_PUBLIC_VERSION}
                   </p>
                   <a
                     href="https://github.com/itzcrazykns/vane"

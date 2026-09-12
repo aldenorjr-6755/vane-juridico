@@ -11,11 +11,7 @@ const websitesForTopic = {
     /* Só hosts que o `bing news` de fato indexa. stj.jus.br, planalto.gov.br,
        dizerodireito.com.br e jusbrasil.com.br respondem com parsing error nessa
        engine - Dizer o Direito entra pelo feed do Blogger, logo abaixo. */
-    links: [
-      'conjur.com.br',
-      'migalhas.com.br',
-      'noticias.stf.jus.br',
-    ],
+    links: ['conjur.com.br', 'migalhas.com.br', 'noticias.stf.jus.br'],
     language: 'pt-BR',
   },
   tech: {
@@ -113,7 +109,9 @@ const fetchConjurFeed = async () => {
         return {
           title: pick('title'),
           url: pick('link'),
-          content: pick('description').replace(/<[^>]+>/g, '').slice(0, 300),
+          content: pick('description')
+            .replace(/<[^>]+>/g, '')
+            .slice(0, 300),
         };
       })
       .filter((item) => item.url && item.title);
@@ -204,7 +202,7 @@ export const GET = async (req: Request) => {
     console.error(`An error occurred in discover route: ${err}`);
     return Response.json(
       {
-        message: 'An error has occurred',
+        message: 'Ocorreu um erro',
       },
       {
         status: 500,

@@ -282,7 +282,7 @@ const Stock = (props: StockWidgetProps) => {
     return (
       <div className="rounded-lg bg-light-secondary dark:bg-dark-secondary border border-light-200 dark:border-dark-200 p-4">
         <p className="text-sm text-black dark:text-white">
-          Error: {props.error}
+          Erro: {props.error}
         </p>
       </div>
     );
@@ -316,7 +316,7 @@ const Stock = (props: StockWidgetProps) => {
                 <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-950/40 border border-green-300 dark:border-green-800">
                   <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
                   <span className="text-xs font-medium text-green-700 dark:text-green-400">
-                    Live
+                    Ao vivo
                   </span>
                 </div>
               )}
@@ -324,7 +324,7 @@ const Stock = (props: StockWidgetProps) => {
                 <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950/40 border border-blue-300 dark:border-blue-800">
                   <Clock className="w-3 h-3 text-blue-600 dark:text-blue-400" />
                   <span className="text-xs font-medium text-blue-700 dark:text-blue-400">
-                    Pre-Market
+                    Pré-mercado
                   </span>
                 </div>
               )}
@@ -332,7 +332,7 @@ const Stock = (props: StockWidgetProps) => {
                 <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-orange-100 dark:bg-orange-950/40 border border-orange-300 dark:border-orange-800">
                   <Clock className="w-3 h-3 text-orange-600 dark:text-orange-400" />
                   <span className="text-xs font-medium text-orange-700 dark:text-orange-400">
-                    After Hours
+                    Pós-mercado
                   </span>
                 </div>
               )}
@@ -429,7 +429,7 @@ const Stock = (props: StockWidgetProps) => {
             <div className="grid grid-cols-3 border-t border-light-200 dark:border-dark-200">
               <div className="flex justify-between p-3 border-r border-light-200 dark:border-dark-200">
                 <span className="text-xs text-black/50 dark:text-white/50">
-                  Prev Close
+                  Fech. Anterior
                 </span>
                 <span className="text-xs text-black dark:text-white font-medium">
                   ${formatNumber(props.regularMarketPreviousClose)}
@@ -437,7 +437,7 @@ const Stock = (props: StockWidgetProps) => {
               </div>
               <div className="flex justify-between p-3 border-r border-light-200 dark:border-dark-200">
                 <span className="text-xs text-black/50 dark:text-white/50">
-                  52W Range
+                  Faixa 52 sem.
                 </span>
                 <span className="text-xs text-black dark:text-white font-medium">
                   ${formatNumber(props.fiftyTwoWeekLow, 2)}-$
@@ -446,7 +446,7 @@ const Stock = (props: StockWidgetProps) => {
               </div>
               <div className="flex justify-between p-3">
                 <span className="text-xs text-black/50 dark:text-white/50">
-                  Market Cap
+                  Valor de Mercado
                 </span>
                 <span className="text-xs text-black dark:text-white font-medium">
                   {formatLargeNumber(props.marketCap)}
@@ -454,7 +454,7 @@ const Stock = (props: StockWidgetProps) => {
               </div>
               <div className="flex justify-between p-3 border-t border-r border-light-200 dark:border-dark-200">
                 <span className="text-xs text-black/50 dark:text-white/50">
-                  Open
+                  Abertura
                 </span>
                 <span className="text-xs text-black dark:text-white font-medium">
                   ${formatNumber(props.regularMarketOpen)}
@@ -462,7 +462,7 @@ const Stock = (props: StockWidgetProps) => {
               </div>
               <div className="flex justify-between p-3 border-t border-r border-light-200 dark:border-dark-200">
                 <span className="text-xs text-black/50 dark:text-white/50">
-                  P/E Ratio
+                  Índice P/L
                 </span>
                 <span className="text-xs text-black dark:text-white font-medium">
                   {props.trailingPE ? formatNumber(props.trailingPE, 2) : 'N/A'}
@@ -470,7 +470,7 @@ const Stock = (props: StockWidgetProps) => {
               </div>
               <div className="flex justify-between p-3 border-t border-light-200 dark:border-dark-200">
                 <span className="text-xs text-black/50 dark:text-white/50">
-                  Dividend Yield
+                  Rendimento de Dividendos
                 </span>
                 <span className="text-xs text-black dark:text-white font-medium">
                   {props.dividendYield
@@ -480,7 +480,7 @@ const Stock = (props: StockWidgetProps) => {
               </div>
               <div className="flex justify-between p-3 border-t border-r border-light-200 dark:border-dark-200">
                 <span className="text-xs text-black/50 dark:text-white/50">
-                  Day Range
+                  Faixa do Dia
                 </span>
                 <span className="text-xs text-black dark:text-white font-medium">
                   ${formatNumber(props.regularMarketDayLow, 2)}-$
@@ -497,7 +497,7 @@ const Stock = (props: StockWidgetProps) => {
               </div>
               <div className="flex justify-between p-3 border-t border-light-200 dark:border-dark-200">
                 <span className="text-xs text-black/50 dark:text-white/50">
-                  EPS
+                  LPA
                 </span>
                 <span className="text-xs text-black dark:text-white font-medium">
                   $

@@ -49,7 +49,7 @@ const ModelSelect = ({
       }
     } catch (error) {
       console.error('Error saving config:', error);
-      toast.error('Failed to save configuration.');
+      toast.error('Falha ao salvar configuração.');
     } finally {
       setLoading(false);
     }
@@ -60,12 +60,13 @@ const ModelSelect = ({
       <div className="space-y-3 lg:space-y-5">
         <div>
           <h4 className="text-sm lg:text-sm text-black dark:text-white">
-            Select {type === 'chat' ? 'Chat Model' : 'Embedding Model'}
+            Selecionar{' '}
+            {type === 'chat' ? 'Modelo de Chat' : 'Modelo de Embedding'}
           </h4>
           <p className="text-[11px] lg:text-xs text-black/50 dark:text-white/50">
             {type === 'chat'
-              ? 'Choose which model to use for generating responses'
-              : 'Choose which model to use for generating embeddings'}
+              ? 'Escolha qual modelo usar para gerar respostas'
+              : 'Escolha qual modelo usar para gerar embeddings'}
           </p>
         </div>
         <Select

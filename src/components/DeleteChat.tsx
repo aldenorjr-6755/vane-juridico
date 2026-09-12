@@ -37,7 +37,7 @@ const DeleteChat = ({
       });
 
       if (res.status != 200) {
-        throw new Error('Failed to delete chat');
+        throw new Error('Falha ao excluir a conversa');
       }
 
       const newChats = chats.filter((chat) => chat.id !== chatId);
@@ -89,10 +89,10 @@ const DeleteChat = ({
               >
                 <DialogPanel className="w-full max-w-md transform rounded-2xl bg-light-secondary dark:bg-dark-secondary border border-light-200 dark:border-dark-200 p-6 text-left align-middle shadow-xl transition-all">
                   <DialogTitle className="text-lg font-medium leading-6 dark:text-white">
-                    Delete Confirmation
+                    Confirmar exclusão
                   </DialogTitle>
                   <Description className="text-sm dark:text-white/70 text-black/70">
-                    Are you sure you want to delete this chat?
+                    Tem certeza de que deseja excluir esta conversa?
                   </Description>
                   <div className="flex flex-row items-end justify-end space-x-4 mt-6">
                     <button
@@ -103,13 +103,13 @@ const DeleteChat = ({
                       }}
                       className="text-black/50 dark:text-white/50 text-sm hover:text-black/70 hover:dark:text-white/70 transition duration-200"
                     >
-                      Cancel
+                      Cancelar
                     </button>
                     <button
                       onClick={handleDelete}
                       className="text-red-400 text-sm hover:text-red-500 transition duration200"
                     >
-                      Delete
+                      Excluir
                     </button>
                   </div>
                 </DialogPanel>

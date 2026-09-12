@@ -14,7 +14,7 @@ export const GET = async (
     });
 
     if (!chatExists) {
-      return Response.json({ message: 'Chat not found' }, { status: 404 });
+      return Response.json({ message: 'Chat não encontrado' }, { status: 404 });
     }
 
     const chatMessages = await db.query.messages.findMany({
@@ -30,10 +30,7 @@ export const GET = async (
     );
   } catch (err) {
     console.error('Error in getting chat by id: ', err);
-    return Response.json(
-      { message: 'An error has occurred.' },
-      { status: 500 },
-    );
+    return Response.json({ message: 'Ocorreu um erro.' }, { status: 500 });
   }
 };
 
@@ -49,21 +46,18 @@ export const DELETE = async (
     });
 
     if (!chatExists) {
-      return Response.json({ message: 'Chat not found' }, { status: 404 });
+      return Response.json({ message: 'Chat não encontrado' }, { status: 404 });
     }
 
     await db.delete(chats).where(eq(chats.id, id)).execute();
     await db.delete(messages).where(eq(messages.chatId, id)).execute();
 
     return Response.json(
-      { message: 'Chat deleted successfully' },
+      { message: 'Chat excluído com sucesso' },
       { status: 200 },
     );
   } catch (err) {
     console.error('Error in deleting chat by id: ', err);
-    return Response.json(
-      { message: 'An error has occurred.' },
-      { status: 500 },
-    );
+    return Response.json({ message: 'Ocorreu um erro.' }, { status: 500 });
   }
 };

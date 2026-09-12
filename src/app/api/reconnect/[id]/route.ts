@@ -10,7 +10,10 @@ export const POST = async (
     const session = SessionManager.getSession(id);
 
     if (!session) {
-      return Response.json({ message: 'Session not found' }, { status: 404 });
+      return Response.json(
+        { message: 'Sessão não encontrada' },
+        { status: 404 },
+      );
     }
 
     const responseStream = new TransformStream();
@@ -85,9 +88,6 @@ export const POST = async (
     });
   } catch (err) {
     console.error('Error in reconnecting to session stream: ', err);
-    return Response.json(
-      { message: 'An error has occurred.' },
-      { status: 500 },
-    );
+    return Response.json({ message: 'Ocorreu um erro.' }, { status: 500 });
   }
 };

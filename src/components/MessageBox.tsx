@@ -121,7 +121,7 @@ const MessageBox = ({
               <div className="flex flex-row items-center space-x-2">
                 <BookCopy className="text-black dark:text-white" size={20} />
                 <h3 className="text-black dark:text-white font-medium text-xl">
-                  Sources
+                  Fontes
                 </h3>
               </div>
               <MessageSources sources={sources} />
@@ -152,7 +152,7 @@ const MessageBox = ({
               <div className="flex items-center gap-2 p-3 rounded-lg bg-light-secondary dark:bg-dark-secondary border border-light-200 dark:border-dark-200">
                 <Disc3 className="w-4 h-4 text-black dark:text-white animate-spin" />
                 <span className="text-sm text-black/70 dark:text-white/70">
-                  Brainstorming...
+                  Organizando ideias...
                 </span>
               </div>
             )}
@@ -170,7 +170,7 @@ const MessageBox = ({
                   size={20}
                 />
                 <h3 className="text-black dark:text-white font-medium text-xl">
-                  Answer
+                  Resposta
                 </h3>
               </div>
             )}
@@ -229,7 +229,7 @@ const MessageBox = ({
                           size={20}
                         />
                         <h3 className="text-black dark:text-white font-medium text-xl">
-                          Related
+                          Relacionados
                         </h3>
                       </div>
                       <div className="space-y-0">

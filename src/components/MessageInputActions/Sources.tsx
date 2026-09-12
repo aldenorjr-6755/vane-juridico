@@ -20,7 +20,7 @@ const sourcesList = [
     icon: <GlobeIcon className="h-[16px] w-auto" />,
   },
   {
-    name: 'Academic',
+    name: 'Acadêmico',
     key: 'academic',
     icon: <GraduationCapIcon className="h-[16px] w-auto" />,
   },

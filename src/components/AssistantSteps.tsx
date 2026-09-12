@@ -35,21 +35,22 @@ const getStepTitle = (
   isStreaming: boolean,
 ): string => {
   if (step.type === 'reasoning') {
-    return isStreaming && !step.reasoning ? 'Thinking...' : 'Thinking';
+    return isStreaming && !step.reasoning ? 'Pensando...' : 'Pensando';
   } else if (step.type === 'searching') {
     const queries = Array.isArray(step.searching) ? step.searching : [];
-    return `Searching ${queries.length} ${queries.length === 1 ? 'query' : 'queries'}`;
+    return `Pesquisando ${queries.length} ${queries.length === 1 ? 'consulta' : 'consultas'}`;
   } else if (step.type === 'search_results') {
-    return `Found ${step.reading.length} ${step.reading.length === 1 ? 'result' : 'results'}`;
+    const resultCount = step.reading.length;
+    return `${resultCount} ${resultCount === 1 ? 'resultado encontrado' : 'resultados encontrados'}`;
   } else if (step.type === 'reading') {
-    return `Reading ${step.reading.length} ${step.reading.length === 1 ? 'source' : 'sources'}`;
+    return `Lendo ${step.reading.length} ${step.reading.length === 1 ? 'fonte' : 'fontes'}`;
   } else if (step.type === 'upload_searching') {
-    return 'Scanning your uploaded documents';
+    return 'Analisando os documentos enviados';
   } else if (step.type === 'upload_search_results') {
-    return `Reading ${step.results.length} ${step.results.length === 1 ? 'document' : 'documents'}`;
+    return `Lendo ${step.results.length} ${step.results.length === 1 ? 'documento' : 'documentos'}`;
   }
 
-  return 'Processing';
+  return 'Processando';
 };
 
 const AssistantSteps = ({
@@ -85,8 +86,8 @@ const AssistantSteps = ({
         <div className="flex items-center gap-2">
           <Brain className="w-4 h-4 text-black dark:text-white" />
           <span className="text-sm font-medium text-black dark:text-white">
-            Research Progress ({block.data.subSteps.length}{' '}
-            {block.data.subSteps.length === 1 ? 'step' : 'steps'})
+            Progresso da pesquisa ({block.data.subSteps.length}{' '}
+            {block.data.subSteps.length === 1 ? 'etapa' : 'etapas'})
           </span>
         </div>
         {isExpanded ? (
@@ -181,7 +182,8 @@ const AssistantSteps = ({
                           <div className="flex flex-wrap gap-1.5 mt-1.5">
                             {step.reading.slice(0, 4).map((result, idx) => {
                               const url = result.metadata.url || '';
-                              const title = result.metadata.title || 'Untitled';
+                              const title =
+                                result.metadata.title || 'Sem título';
                               const domain = url ? new URL(url).hostname : '';
                               const faviconUrl = domain
                                 ? `https://s2.googleusercontent.com/s2/favicons?domain=${domain}&sz=128`
@@ -233,7 +235,7 @@ const AssistantSteps = ({
                                 (result.metadata &&
                                   (result.metadata.title ||
                                     result.metadata.fileName)) ||
-                                'Untitled document';
+                                'Documento sem título';
 
                               return (
                                 <div

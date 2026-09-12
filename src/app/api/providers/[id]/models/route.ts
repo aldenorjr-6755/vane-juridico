@@ -15,7 +15,7 @@ export const POST = async (
     if (!body.key || !body.name) {
       return Response.json(
         {
-          message: 'Key and name must be provided',
+          message: 'Chave e nome devem ser fornecidos',
         },
         {
           status: 400,
@@ -29,7 +29,7 @@ export const POST = async (
 
     return Response.json(
       {
-        message: 'Model added successfully',
+        message: 'Modelo adicionado com sucesso',
       },
       {
         status: 200,
@@ -39,7 +39,7 @@ export const POST = async (
     console.error('An error occurred while adding provider model', err);
     return Response.json(
       {
-        message: 'An error has occurred.',
+        message: 'Ocorreu um erro.',
       },
       {
         status: 500,
@@ -60,7 +60,7 @@ export const DELETE = async (
     if (!body.key) {
       return Response.json(
         {
-          message: 'Key and name must be provided',
+          message: 'Chave e nome devem ser fornecidos',
         },
         {
           status: 400,
@@ -74,7 +74,7 @@ export const DELETE = async (
 
     return Response.json(
       {
-        message: 'Model added successfully',
+        message: 'Modelo adicionado com sucesso',
       },
       {
         status: 200,
@@ -84,7 +84,7 @@ export const DELETE = async (
     console.error('An error occurred while deleting provider model', err);
     return Response.json(
       {
-        message: 'An error has occurred.',
+        message: 'Ocorreu um erro.',
       },
       {
         status: 500,

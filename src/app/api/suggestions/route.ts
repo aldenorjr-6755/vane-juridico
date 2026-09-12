@@ -32,7 +32,7 @@ export const POST = async (req: Request) => {
   } catch (err) {
     console.error(`An error occurred while generating suggestions: ${err}`);
     return Response.json(
-      { message: 'An error occurred while generating suggestions' },
+      { message: 'Ocorreu um erro ao gerar sugestões' },
       { status: 500 },
     );
   }

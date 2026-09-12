@@ -9,7 +9,7 @@ export const POST = async (req: Request) => {
     if (!body.lat || !body.lng) {
       return Response.json(
         {
-          message: 'Invalid request.',
+          message: 'Requisição inválida.',
         },
         { status: 400 },
       );
@@ -27,7 +27,7 @@ export const POST = async (req: Request) => {
       console.error(`Error fetching weather data: ${data.reason}`);
       return Response.json(
         {
-          message: 'An error has occurred.',
+          message: 'Ocorreu um erro.',
         },
         { status: 500 },
       );
@@ -58,136 +58,136 @@ export const POST = async (req: Request) => {
     switch (code) {
       case 0:
         weather.icon = `clear-${dayOrNight}`;
-        weather.condition = 'Clear';
+        weather.condition = 'Céu limpo';
         break;
 
       case 1:
         weather.icon = `cloudy-1-${dayOrNight}`;
-        weather.condition = 'Mainly Clear';
+        weather.condition = 'Predominantemente limpo';
         break;
       case 2:
         weather.icon = `cloudy-1-${dayOrNight}`;
-        weather.condition = 'Partly Cloudy';
+        weather.condition = 'Parcialmente nublado';
         break;
       case 3:
         weather.icon = `cloudy-1-${dayOrNight}`;
-        weather.condition = 'Cloudy';
+        weather.condition = 'Nublado';
         break;
 
       case 45:
         weather.icon = `fog-${dayOrNight}`;
-        weather.condition = 'Fog';
+        weather.condition = 'Nevoeiro';
         break;
       case 48:
         weather.icon = `fog-${dayOrNight}`;
-        weather.condition = 'Fog';
+        weather.condition = 'Nevoeiro';
         break;
 
       case 51:
         weather.icon = `rainy-1-${dayOrNight}`;
-        weather.condition = 'Light Drizzle';
+        weather.condition = 'Garoa fraca';
         break;
       case 53:
         weather.icon = `rainy-1-${dayOrNight}`;
-        weather.condition = 'Moderate Drizzle';
+        weather.condition = 'Garoa moderada';
         break;
       case 55:
         weather.icon = `rainy-1-${dayOrNight}`;
-        weather.condition = 'Dense Drizzle';
+        weather.condition = 'Garoa forte';
         break;
 
       case 56:
         weather.icon = `frost-${dayOrNight}`;
-        weather.condition = 'Light Freezing Drizzle';
+        weather.condition = 'Garoa congelante fraca';
         break;
       case 57:
         weather.icon = `frost-${dayOrNight}`;
-        weather.condition = 'Dense Freezing Drizzle';
+        weather.condition = 'Garoa congelante forte';
         break;
 
       case 61:
         weather.icon = `rainy-2-${dayOrNight}`;
-        weather.condition = 'Slight Rain';
+        weather.condition = 'Chuva fraca';
         break;
       case 63:
         weather.icon = `rainy-2-${dayOrNight}`;
-        weather.condition = 'Moderate Rain';
+        weather.condition = 'Chuva moderada';
         break;
       case 65:
-        weather.condition = 'Heavy Rain';
+        weather.condition = 'Chuva forte';
         weather.icon = `rainy-2-${dayOrNight}`;
         break;
 
       case 66:
         weather.icon = 'rain-and-sleet-mix';
-        weather.condition = 'Light Freezing Rain';
+        weather.condition = 'Chuva congelante fraca';
         break;
       case 67:
-        weather.condition = 'Heavy Freezing Rain';
+        weather.condition = 'Chuva congelante forte';
         weather.icon = 'rain-and-sleet-mix';
         break;
 
       case 71:
         weather.icon = `snowy-2-${dayOrNight}`;
-        weather.condition = 'Slight Snow Fall';
+        weather.condition = 'Neve fraca';
         break;
       case 73:
         weather.icon = `snowy-2-${dayOrNight}`;
-        weather.condition = 'Moderate Snow Fall';
+        weather.condition = 'Neve moderada';
         break;
       case 75:
-        weather.condition = 'Heavy Snow Fall';
+        weather.condition = 'Neve forte';
         weather.icon = `snowy-2-${dayOrNight}`;
         break;
 
       case 77:
-        weather.condition = 'Snow';
+        weather.condition = 'Neve';
         weather.icon = `snowy-1-${dayOrNight}`;
         break;
 
       case 80:
         weather.icon = `rainy-3-${dayOrNight}`;
-        weather.condition = 'Slight Rain Showers';
+        weather.condition = 'Pancadas de chuva fracas';
         break;
       case 81:
         weather.icon = `rainy-3-${dayOrNight}`;
-        weather.condition = 'Moderate Rain Showers';
+        weather.condition = 'Pancadas de chuva moderadas';
         break;
       case 82:
-        weather.condition = 'Heavy Rain Showers';
+        weather.condition = 'Pancadas de chuva fortes';
         weather.icon = `rainy-3-${dayOrNight}`;
         break;
 
       case 85:
         weather.icon = `snowy-3-${dayOrNight}`;
-        weather.condition = 'Slight Snow Showers';
+        weather.condition = 'Pancadas de neve fracas';
         break;
       case 86:
         weather.icon = `snowy-3-${dayOrNight}`;
-        weather.condition = 'Moderate Snow Showers';
+        weather.condition = 'Pancadas de neve moderadas';
         break;
       case 87:
-        weather.condition = 'Heavy Snow Showers';
+        weather.condition = 'Pancadas de neve fortes';
         weather.icon = `snowy-3-${dayOrNight}`;
         break;
 
       case 95:
-        weather.condition = 'Thunderstorm';
+        weather.condition = 'Tempestade';
         weather.icon = `scattered-thunderstorms-${dayOrNight}`;
         break;
 
       case 96:
         weather.icon = 'severe-thunderstorm';
-        weather.condition = 'Thunderstorm with Slight Hail';
+        weather.condition = 'Tempestade com granizo fraco';
         break;
       case 99:
-        weather.condition = 'Thunderstorm with Heavy Hail';
+        weather.condition = 'Tempestade com granizo forte';
         weather.icon = 'severe-thunderstorm';
         break;
 
       default:
         weather.icon = `clear-${dayOrNight}`;
-        weather.condition = 'Clear';
+        weather.condition = 'Céu limpo';
         break;
     }
 
@@ -196,7 +196,7 @@ export const POST = async (req: Request) => {
     console.error('An error occurred while getting home widgets', err);
     return Response.json(
       {
-        message: 'An error has occurred.',
+        message: 'Ocorreu um erro.',
       },
       {
         status: 500,

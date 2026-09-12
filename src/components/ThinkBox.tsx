@@ -30,7 +30,7 @@ const ThinkBox = ({ content, thinkingEnded }: ThinkBoxProps) => {
             size={20}
             className="text-[#9C27B0] dark:text-[#CE93D8]"
           />
-          <p className="font-medium text-sm">Thinking Process</p>
+          <p className="font-medium text-sm">Processo de raciocínio</p>
         </div>
         {isExpanded ? (
           <ChevronUp size={18} className="text-black/70 dark:text-white/70" />

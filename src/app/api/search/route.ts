@@ -22,7 +22,7 @@ export const POST = async (req: Request) => {
 
     if (!body.sources || !body.query) {
       return Response.json(
-        { message: 'Missing sources or query' },
+        { message: 'Fontes ou consulta ausentes' },
         { status: 400 },
       );
     }
@@ -86,7 +86,7 @@ export const POST = async (req: Request) => {
               } catch (error) {
                 reject(
                   Response.json(
-                    { message: 'Error parsing data' },
+                    { message: 'Erro ao processar dados' },
                     { status: 500 },
                   ),
                 );
@@ -100,7 +100,7 @@ export const POST = async (req: Request) => {
             if (event === 'error') {
               reject(
                 Response.json(
-                  { message: 'Search error', error: data },
+                  { message: 'Erro na busca', error: data },
                   { status: 500 },
                 ),
               );
@@ -123,7 +123,7 @@ export const POST = async (req: Request) => {
           encoder.encode(
             JSON.stringify({
               type: 'init',
-              data: 'Stream connected',
+              data: 'Stream conectado',
             }) + '\n',
           ),
         );
@@ -200,9 +200,6 @@ export const POST = async (req: Request) => {
     });
   } catch (err: any) {
     console.error(`Error in getting search results: ${err.message}`);
-    return Response.json(
-      { message: 'An error has occurred.' },
-      { status: 500 },
-    );
+    return Response.json({ message: 'Ocorreu um erro.' }, { status: 500 });
   }
 };
